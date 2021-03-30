@@ -1,12 +1,19 @@
 import React, { useState } from "react";
 import Button from "components/CustomButtons/Button.js";
 import PropTypes from "prop-types";
+import "./Login.css";
+import api from "services/api";
+
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import { Box } from "@material-ui/core";
 import MuiPhoneNumber from "material-ui-phone-number";
-import "./Login.css";
-import api from "services/api";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 function Login(props) {
   const [formData, setFormData] = useState({
@@ -17,6 +24,8 @@ function Login(props) {
     phoneNumber: null,
     password: null,
   });
+  const [alertIsOpen, setAlertIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleChange(e) {
     if (typeof e === "string") {
@@ -27,6 +36,7 @@ function Login(props) {
   }
 
   async function handleSumbit(e) {
+    setIsLoading(true);
     e.preventDefault();
     if (formData.phoneNumber === "" || formData.password === "") {
       setValidator({
@@ -37,6 +47,7 @@ function Login(props) {
         password:
           formData.password === "" ? "La contraseña es requerida." : null,
       });
+      setIsLoading(false);
       return;
     }
     try {
@@ -47,10 +58,11 @@ function Login(props) {
       let { access, refresh } = response.data;
       localStorage.setItem("accessToken", access);
       localStorage.setItem("refreshToken", refresh);
+      setIsLoading(false);
       props.history.push("/admin/dashboard");
     } catch (error) {
-      console.error(error);
-      alert("Login falló");
+      setIsLoading(false);
+      setAlertIsOpen(true);
     }
   }
 
@@ -92,6 +104,31 @@ function Login(props) {
             LOG IN
           </Button>
         </Box>
+        {isLoading && <CircularProgress size={30} />}
+        <Dialog
+          open={alertIsOpen}
+          onClose={() => setAlertIsOpen(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Credenciales incorrectas"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              El el usuario o la contraseña son incorrectas.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => setAlertIsOpen(false)}
+              color="primary"
+              autoFocus
+            >
+              Reintentar
+            </Button>
+          </DialogActions>
+        </Dialog>
       </form>
     </Grid>
   );
