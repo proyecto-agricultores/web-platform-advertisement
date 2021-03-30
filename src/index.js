@@ -37,9 +37,9 @@ function App() {
         <Route path="/login" component={Login} />
         <ProtectedRoute path="/admin" component={Admin} />
         <ProtectedRoute path="/user" component={UserProfile} />
-        <Route path="*" component={() => "NOT FOUND 404"} />
         <Redirect from="/" to="/admin/dashboard" />
         <Redirect from="/material-dashboard-react" to="/admin/dashboard" />
+        <Route path="*" component={() => "NOT FOUND 404"} />
       </Switch>
     </Router>
   );

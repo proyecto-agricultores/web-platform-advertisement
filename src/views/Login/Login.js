@@ -13,6 +13,10 @@ function Login(props) {
     phoneNumber: "",
     password: "",
   });
+  const [validator, setValidator] = useState({
+    phoneNumber: null,
+    password: null,
+  });
 
   function handleChange(e) {
     if (typeof e === "string") {
@@ -24,6 +28,17 @@ function Login(props) {
 
   async function handleSumbit(e) {
     e.preventDefault();
+    if (formData.phoneNumber === "" || formData.password === "") {
+      setValidator({
+        phoneNumber:
+          formData.phoneNumber === ""
+            ? "El número de teléfono es requerido."
+            : null,
+        password:
+          formData.password === "" ? "La contraseña es requerida." : null,
+      });
+      return;
+    }
     try {
       let response = await api.token({
         phone_number: formData.phoneNumber,
@@ -35,7 +50,7 @@ function Login(props) {
       props.history.push("/admin/dashboard");
     } catch (error) {
       console.error(error);
-      // alert(error.response.data.error);
+      alert("Login falló");
     }
   }
 
@@ -53,6 +68,9 @@ function Login(props) {
           onChange={handleChange}
           name="phoneNumber"
         />
+        {validator.phoneNumber && (
+          <p className="validator-text">{validator.phoneNumber}</p>
+        )}
         <TextField
           id="standard-password-input"
           label="Contraseña"
@@ -61,6 +79,9 @@ function Login(props) {
           name="password"
           onChange={handleChange}
         />
+        {validator.password && (
+          <p className="validator-text">{validator.password}</p>
+        )}
         <Box m={3}>
           <Button
             type="button"
