@@ -7,55 +7,56 @@ import Loading from "components/Loading/Loading";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    async function heartBeat() {
-      api
-        .hello()
-        .then(() => {
+    let mounted = true;
+    api
+      .hello()
+      .then(() => {
+        if (mounted) {
           setIsAuthenticated(true);
           setIsLoading(false);
-        })
-        .catch(() => {
-          setIsLoading(false);
-        });
-    }
+        }
+      })
+      .catch((error) => {
+        setIsAuthenticated(false);
+        setIsLoading(false);
 
-    heartBeat();
+        console.log("error", error);
+      });
+
+    return function cleanup() {
+      mounted = false;
+    };
   }, []);
 
-  if (!isLoading) {
+  if (isLoading) {
     return <Loading />;
   }
 
-  console.log(isAuthenticated);
-
   return (
     <>
-      {isLoading && (
-        <Route
-          {...rest}
-          render={(props) => {
-            if (isAuthenticated) {
-              console.log("heartbeat true");
-              return <Component {...props} />;
-            } else {
-              console.log("heartbeat false");
-              return (
-                <Redirect
-                  to={{
-                    pathname: "/login",
-                    state: {
-                      from: props.location,
-                    },
-                  }}
-                />
-              );
-            }
-          }}
-        />
-      )}
+      <Route
+        {...rest}
+        render={(props) => {
+          console.log("isAuthenticated", isAuthenticated);
+          if (isAuthenticated) {
+            return <Component {...props} />;
+          } else {
+            return (
+              <Redirect
+                to={{
+                  pathname: "/login",
+                  state: {
+                    from: props.location,
+                  },
+                }}
+              />
+            );
+          }
+        }}
+      />
     </>
   );
 };
