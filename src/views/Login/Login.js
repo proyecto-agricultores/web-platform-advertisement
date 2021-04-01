@@ -59,7 +59,7 @@ function Login(props) {
       localStorage.setItem("accessToken", access);
       localStorage.setItem("refreshToken", refresh);
       setIsLoading(false);
-      props.history.push("/admin/dashboard");
+      props.history.push("/ad");
     } catch (error) {
       setIsLoading(false);
       setAlertIsOpen(true);
@@ -116,7 +116,7 @@ function Login(props) {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              El el usuario o la contraseña son incorrectas.
+              El usuario o la contraseña son incorrectas.
             </DialogContentText>
           </DialogContent>
           <DialogActions>

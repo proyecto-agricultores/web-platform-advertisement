@@ -22,12 +22,11 @@ axios.interceptors.response.use(
   (error) => {
     const originalRequest = error.config;
     let refreshToken = localStorage.getItem("refreshToken");
-    if (
-      refreshToken &&
-      error.response.status === 401 &&
-      originalRequest._retry
-    ) {
-      originalRequest._retry = true;
+    console.log("originalRequest", originalRequest);
+    console.log("error", error);
+    console.log("error status", error.response.status);
+    console.log("_retry", originalRequest._retry);
+    if (refreshToken && error.response.status === 401) {
       return axios
         .post(`${BASE_URL}/api/token/refresh`, {
           refresh: refreshToken,

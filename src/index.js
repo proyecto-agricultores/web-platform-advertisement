@@ -27,6 +27,7 @@ import "assets/css/material-dashboard-react.css?v=1.9.0";
 import UserProfile from "views/UserProfile/UserProfile";
 import Login from "views/Login/Login";
 import ProtectedRoute from "services/ProtectedRoute";
+import CreateAd from "views/CreateAd/CreateAd";
 
 const hist = createBrowserHistory();
 
@@ -37,6 +38,7 @@ function App() {
         <Route path="/login" component={Login} />
         <ProtectedRoute path="/admin" component={Admin} />
         <ProtectedRoute path="/user" component={UserProfile} />
+        <ProtectedRoute path="/ad" component={CreateAd} />
         <Redirect from="/" to="/admin/dashboard" />
         <Redirect from="/material-dashboard-react" to="/admin/dashboard" />
         <Route path="*" component={() => "NOT FOUND 404"} />
