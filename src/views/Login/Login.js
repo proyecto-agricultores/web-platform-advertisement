@@ -56,8 +56,8 @@ function Login(props) {
         password: formData.password,
       });
       let { access, refresh } = response.data;
-      localStorage.setItem("accessToken", access);
-      localStorage.setItem("refreshToken", refresh);
+      localStorage.setItem("access_token", access);
+      localStorage.setItem("refresh_token", refresh);
       setIsLoading(false);
       props.history.push("/ad");
     } catch (error) {

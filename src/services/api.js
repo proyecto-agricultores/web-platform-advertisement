@@ -4,7 +4,7 @@ const BASE_URL = "https://dev-cosecha-pr-32.herokuapp.com";
 
 axios.interceptors.request.use(
   (config) => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("access_token");
     if (accessToken) {
       config.headers["Authorization"] = "Bearer " + accessToken;
     }
@@ -19,26 +19,19 @@ axios.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
+  async (error) => {
     const originalRequest = error.config;
-    let refreshToken = localStorage.getItem("refreshToken");
-    console.log("originalRequest", originalRequest);
-    console.log("error", error);
-    console.log("error status", error.response.status);
-    console.log("_retry", originalRequest._retry);
+    let refreshToken = localStorage.getItem("refresh_token");
+    refreshToken = refreshToken === "null" ? null : refreshToken;
     if (refreshToken && error.response.status === 401) {
-      return axios
-        .post(`${BASE_URL}/api/token/refresh`, {
-          refresh: refreshToken,
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            localStorage.setItem("accessToken", response.data.access);
-            localStorage.setItem("refreshToken", null);
-            console.log("Access token refreshed!", response.data);
-            return axios(originalRequest);
-          }
-        });
+      const response = await axios.post(`${BASE_URL}/api/token/refresh/`, {
+        refresh: refreshToken,
+      });
+      if (response.status === 200) {
+        localStorage.setItem("access_token", response.data.access);
+        localStorage.removeItem("refresh_token");
+        return axios(originalRequest);
+      }
     }
     return Promise.reject(error);
   }
@@ -50,6 +43,14 @@ const api = {
   },
   token: (body) => {
     return axios.post(`${BASE_URL}/api/token/`, body);
+  },
+  supplies: () => {
+    return axios.get(`${BASE_URL}/supplys/`);
+  },
+  getRegionsByDepartmentId: (departmentId) => {
+    return axios.get(
+      `${BASE_URL}/api/filter/regions/?department=${departmentId}`
+    );
   },
 };
 
