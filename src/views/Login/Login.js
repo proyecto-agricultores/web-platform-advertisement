@@ -63,7 +63,7 @@ function Login() {
       localStorage.setItem("access_token", access);
       localStorage.setItem("refresh_token", refresh);
       setIsLoading(false);
-      history.push("/ad");
+      history.push("/myAds");
     } catch (error) {
       setIsLoading(false);
       setAlertIsOpen(true);

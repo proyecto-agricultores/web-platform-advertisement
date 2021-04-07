@@ -9,6 +9,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import Login from "./views/Login/Login";
 import CreateAd from "./views/CreateAd/CreateAd";
 import ProtectedRoute from "./services/ProtectedRoute";
+import MyAds from "./views/MyAds/MyAds";
 
 let theme = createMuiTheme({
   typography: {
@@ -32,6 +33,7 @@ function App() {
       <div className="App">
         <Switch>
           <Route exact path="/" component={Login} />
+          <ProtectedRoute path="/myAds" component={MyAds} />
           <ProtectedRoute path="/ad" component={CreateAd} />
           <Route path="*" component={() => "NOT FOUND 404"} />
         </Switch>

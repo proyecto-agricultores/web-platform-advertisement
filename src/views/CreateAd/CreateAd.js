@@ -7,6 +7,7 @@ import AdAudienceForm from "../../components/AdAudienceForm/AdAudienceForm";
 import departmentOptions from "../../data/departments.json";
 import LocationForm from "../../components/AdAudienceForm/LocationForm";
 import api from "../../services/api";
+import AppBar from "../../components/AppBar/AppBar";
 
 function CreateAd() {
   // const [loadingSupplies, setLoadingSupplies] = useState(true);
@@ -57,34 +58,37 @@ function CreateAd() {
   };
 
   return (
-    <div className="create-ad-form-container">
-      <div className="create-ad-form">
-        <h3>Audiencia</h3>
-        <LocationForm
-          setSelectedDepartment={setSelectedDepartment}
-          setSelectedRegion={setSelectedRegion}
-          setSelectedDistrict={setSelectedDistrict}
-        />
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSumbit}
-        >
-          {(formik) => (
-            <Form onSubmit={formik.handleSubmit}>
-              <AdAudienceForm
-                publicationTypeOptions={publicationTypeOptions}
-                supplyOptions={supplyOptions}
-                departmentOptions={departmentOptions}
-                areaUnitOptions={areaUnitOptions}
-                formik={formik}
-              />
-              <button type="submit">Calcular audiencia</button>
-            </Form>
-          )}
-        </Formik>
+    <>
+      <AppBar />
+      <div className="create-ad-form-container">
+        <div className="create-ad-form">
+          <h3>Audiencia</h3>
+          <LocationForm
+            setSelectedDepartment={setSelectedDepartment}
+            setSelectedRegion={setSelectedRegion}
+            setSelectedDistrict={setSelectedDistrict}
+          />
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSumbit}
+          >
+            {(formik) => (
+              <Form onSubmit={formik.handleSubmit}>
+                <AdAudienceForm
+                  publicationTypeOptions={publicationTypeOptions}
+                  supplyOptions={supplyOptions}
+                  departmentOptions={departmentOptions}
+                  areaUnitOptions={areaUnitOptions}
+                  formik={formik}
+                />
+                <button type="submit">Calcular audiencia</button>
+              </Form>
+            )}
+          </Formik>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
