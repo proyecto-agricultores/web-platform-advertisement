@@ -3,7 +3,7 @@ import { Route, Redirect, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import api from "./api";
-import Loading from "components/Loading/Loading";
+import Loading from "../components/Loading/Loading";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -41,12 +41,13 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
         {...rest}
         render={(props) => {
           if (isAuthenticated) {
+            console.log("hola");
             return <Component {...props} />;
           } else {
             return (
               <Redirect
                 to={{
-                  pathname: "/login",
+                  pathname: "/",
                   state: {
                     from: props.location,
                   },

@@ -3,27 +3,24 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import "./CreateAd.css";
-import AdAudienceForm from "components/AdAudienceForm/AdAudienceForm";
-import api from "services/api";
+import AdAudienceForm from "../../components/AdAudienceForm/AdAudienceForm";
 import departmentOptions from "../../data/departments.json";
+import LocationForm from "../../components/AdAudienceForm/LocationForm";
+import api from "../../services/api";
 
 function CreateAd() {
-  const [loadingSupplies, setLoadingSupplies] = useState(true);
-  const [supplyOptions, setSupplyOptions] = useState(null);
-  const [regionOptions, setRegionOptions] = useState([
-    { key: "Todas los regiones", value: "0" },
-  ]);
-  const [districtOptions, setDistrictOptions] = useState([
-    { key: "Todos los distritos", value: "0" },
-  ]);
+  // const [loadingSupplies, setLoadingSupplies] = useState(true);
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [selectedRegion, setSelectedRegion] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [supplyOptions, setSupplyOptions] = useState([]);
 
   useEffect(() => {
     api.supplies().then((response) => {
       const supplies = response.data.map((supply) => {
         const { id: value, name: key } = supply;
-        return { key: key, value: value };
+        return { key: key, value: value.toString() };
       });
-      supplies.push({ key: "Todos los insumos", value: "0" });
       setSupplyOptions(supplies);
     });
   }, []);
@@ -40,13 +37,7 @@ function CreateAd() {
 
   const initialValues = {
     publicationTypeOption: [],
-    departmentOption: "0",
-    regionOption: "0",
-    districtOption: "0",
     supplyOption: [],
-    areaUnitOption: "m2",
-    minimumAreaInput: "",
-    maximumAreaInput: "",
     sowingInitialDate: null,
     sowingFinalDate: null,
     harvestInitialDate: null,
@@ -55,41 +46,44 @@ function CreateAd() {
 
   const validationSchema = Yup.object({
     publicationTypeOption: Yup.array().min(1, "Elija al menos una opción."),
-    sowingInitialDate: Yup.date().required("Campo requerido.").nullable(),
-    sowingFinalDate: Yup.date().required("Campo requerido.").nullable(),
-    harvestInitialDate: Yup.date().required("Campo requerido.").nullable(),
-    harvestFinalDate: Yup.date().required("Campo requerido.").nullable(),
+    supplyTypeOption: Yup.array().min(1, "Elija al menos una opción."),
   });
 
   const onSumbit = (values) => {
     console.log("Form data", values);
+    console.log(selectedDepartment);
+    console.log(selectedRegion);
+    console.log(selectedDistrict);
   };
 
   return (
-    <div>
+    <div className="create-ad-form-container">
       <div className="create-ad-form">
         <h3>Audiencia</h3>
+        <LocationForm
+          setSelectedDepartment={setSelectedDepartment}
+          setSelectedRegion={setSelectedRegion}
+          setSelectedDistrict={setSelectedDistrict}
+        />
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={onSumbit}
         >
-          {() => (
-            <Form>
+          {(formik) => (
+            <Form onSubmit={formik.handleSubmit}>
               <AdAudienceForm
                 publicationTypeOptions={publicationTypeOptions}
                 supplyOptions={supplyOptions}
                 departmentOptions={departmentOptions}
-                regionOptions={regionOptions}
-                districtOptions={districtOptions}
                 areaUnitOptions={areaUnitOptions}
+                formik={formik}
               />
               <button type="submit">Calcular audiencia</button>
             </Form>
           )}
         </Formik>
       </div>
-      );
     </div>
   );
 }

@@ -52,6 +52,9 @@ const api = {
       `${BASE_URL}/api/filter/regions/?department=${departmentId}`
     );
   },
+  getDistrictsByRegionId: (regionId) => {
+    return axios.get(`${BASE_URL}/api/filter/districts/?region=${regionId}`);
+  },
 };
 
 export default api;

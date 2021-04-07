@@ -1,24 +1,39 @@
 .create-ad-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .create-ad-form label {
-    font-weight: bold;
-    display: flex;
-    margin-bottom: 5px;
-    font-size: medium;
+  font-weight: bold;
+  display: flex;
+  margin-bottom: 5px;
+  font-size: medium;
+  align-items: center;
 }
 
 .create-ad-form input + label {
-    font-weight: bold;
-    display: inline-flex;
-    margin-right: 20px;
-    font-size: small;
+  font-weight: bold;
+  display: inline-flex;
+  margin-right: 20px;
+  font-size: small;
 }
 
 .create-ad-form button {
-    margin: 20px auto;
-    width: 100%;
+  margin: 20px auto;
+  width: 100%;
+}
+
+.create-ad-form-container {
+  width: 800px;
+  margin: 20px auto;
+  background-color: white;
+  border-radius: 20px;
+  padding: 10px 20px;
+}
+
+@media only screen and (max-width: 900px) {
+  .create-ad-form-container {
+    width: 600px;
+  }
 }

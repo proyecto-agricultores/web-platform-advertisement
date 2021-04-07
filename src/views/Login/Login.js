@@ -1,9 +1,4 @@
 import React, { useState } from "react";
-import Button from "components/CustomButtons/Button.js";
-import PropTypes from "prop-types";
-import "./Login.css";
-import api from "services/api";
-
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import { Box } from "@material-ui/core";
@@ -14,8 +9,15 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Button from "@material-ui/core/Button";
+import { useHistory } from "react-router-dom";
+import useButtonStyles from "../../styles/useButtonStyles";
 
-function Login(props) {
+import "./Login.css";
+import api from "../../services/api";
+
+function Login() {
+  const history = useHistory();
   const [formData, setFormData] = useState({
     phoneNumber: "",
     password: "",
@@ -26,6 +28,8 @@ function Login(props) {
   });
   const [alertIsOpen, setAlertIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const classes = useButtonStyles();
 
   function handleChange(e) {
     if (typeof e === "string") {
@@ -59,7 +63,7 @@ function Login(props) {
       localStorage.setItem("access_token", access);
       localStorage.setItem("refresh_token", refresh);
       setIsLoading(false);
-      props.history.push("/ad");
+      history.push("/ad");
     } catch (error) {
       setIsLoading(false);
       setAlertIsOpen(true);
@@ -74,7 +78,12 @@ function Login(props) {
       alignItems="center"
     >
       <form id="login-form-cosecha">
-        <h3>Login</h3>
+        <h2>Anunciantes</h2>
+        <img
+          src="logo-cosecha.png"
+          alt="Logo"
+          style={{ width: "50px", height: "50px" }}
+        />
         <MuiPhoneNumber
           defaultCountry={"pe"}
           onChange={handleChange}
@@ -83,25 +92,30 @@ function Login(props) {
         {validator.phoneNumber && (
           <p className="validator-text">{validator.phoneNumber}</p>
         )}
-        <TextField
-          id="standard-password-input"
-          label="Contraseña"
-          type="password"
-          autoComplete="current-password"
-          name="password"
-          onChange={handleChange}
-        />
+        <div className="login-field">
+          <TextField
+            id="standard-password-input"
+            label="Contraseña"
+            type="password"
+            autoComplete="current-password"
+            name="password"
+            onChange={handleChange}
+          />
+        </div>
         {validator.password && (
           <p className="validator-text">{validator.password}</p>
         )}
         <Box m={3}>
           <Button
-            type="button"
+            classes={{
+              root: classes.root,
+            }}
             color="primary"
             className="center"
             onClick={handleSumbit}
+            disabled={isLoading}
           >
-            LOG IN
+            Ingresar
           </Button>
         </Box>
         {isLoading && <CircularProgress size={30} />}
@@ -116,15 +130,11 @@ function Login(props) {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              El usuario o la contraseña son incorrectas.
+              El usuario o la contraseña son incorrectos.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button
-              onClick={() => setAlertIsOpen(false)}
-              color="primary"
-              autoFocus
-            >
+            <Button onClick={() => setAlertIsOpen(false)} variant="contained">
               Reintentar
             </Button>
           </DialogActions>
@@ -133,11 +143,5 @@ function Login(props) {
     </Grid>
   );
 }
-
-Login.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
 export default Login;
