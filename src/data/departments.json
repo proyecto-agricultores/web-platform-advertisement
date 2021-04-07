@@ -1,0 +1,106 @@
+[
+    {
+        "value": 0,
+        "key": "Todos los departamentos"
+    },
+    {
+        "value": 1,
+        "key": "Amazonas"
+    },
+    {
+        "value": 2,
+        "key": "Ancash"
+    },
+    {
+        "value": 3,
+        "key": "Apurimac"
+    },
+    {
+        "value": 4,
+        "key": "Arequipa"
+    },
+    {
+        "value": 5,
+        "key": "Ayacucho"
+    },
+    {
+        "value": 6,
+        "key": "Cajamarca"
+    },
+    {
+        "value": 7,
+        "key": "Callao"
+    },
+    {
+        "value": 8,
+        "key": "Cusco"
+    },
+    {
+        "value": 9,
+        "key": "Huancavelica"
+    },
+    {
+        "value": 10,
+        "key": "Huanuco"
+    },
+    {
+        "value": 11,
+        "key": "Ica"
+    },
+    {
+        "value": 12,
+        "key": "Junin"
+    },
+    {
+        "value": 13,
+        "key": "La Libertad"
+    },
+    {
+        "value": 14,
+        "key": "Lambayeque"
+    },
+    {
+        "value": 15,
+        "key": "Lima"
+    },
+    {
+        "value": 16,
+        "key": "Loreto"
+    },
+    {
+        "value": 17,
+        "key": "Madre de Dios"
+    },
+    {
+        "value": 18,
+        "key": "Moquegua"
+    },
+    {
+        "value": 19,
+        "key": "Pasco"
+    },
+    {
+        "value": 20,
+        "key": "Piura"
+    },
+    {
+        "value": 21,
+        "key": "Puno"
+    },
+    {
+        "value": 22,
+        "key": "San Martin"
+    },
+    {
+        "value": 23,
+        "key": "Tacna"
+    },
+    {
+        "value": 24,
+        "key": "Tumbes"
+    },
+    {
+        "value": 25,
+        "key": "Ucayali"
+    }
+]

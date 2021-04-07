@@ -1,0 +1,21 @@
+.create-ad-form-location-dropdowns {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  flex-flow: row wrap;
+}
+
+.create-ad-form-location-dropdown {
+  width: 250px;
+  margin: 10px 0px;
+}
+
+.create-ad-form-location-dropdown select {
+  width: 100%;
+}
+
+.create-ad-form-location-container {
+  width: 100%;
+}
