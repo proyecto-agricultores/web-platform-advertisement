@@ -11,9 +11,9 @@ import AppBar from "../../components/AppBar/AppBar";
 
 function CreateAd() {
   // const [loadingSupplies, setLoadingSupplies] = useState(true);
-  const [selectedDepartment, setSelectedDepartment] = useState(null);
-  const [selectedRegion, setSelectedRegion] = useState(null);
-  const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [selectedDepartment, setSelectedDepartment] = useState("0");
+  const [selectedRegion, setSelectedRegion] = useState("0");
+  const [selectedDistrict, setSelectedDistrict] = useState("0");
   const [supplyOptions, setSupplyOptions] = useState([]);
 
   useEffect(() => {
@@ -64,8 +64,11 @@ function CreateAd() {
         <div className="create-ad-form">
           <h3>Paso 1: Calcular audiencia</h3>
           <LocationForm
+            selectedDepartment={selectedDepartment}
             setSelectedDepartment={setSelectedDepartment}
+            selectedRegion={selectedRegion}
             setSelectedRegion={setSelectedRegion}
+            selectedDistrict={selectedDistrict}
             setSelectedDistrict={setSelectedDistrict}
           />
           <Formik

@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import { makeStyles } from "@material-ui/core/styles";
 
 import api from "../../services/api";
 import departmentOptions from "../../data/departments.json";
@@ -7,27 +11,51 @@ import "./LocationForm.css";
 const regionsInitialValue = [{ key: "Todas los regiones", value: 0 }];
 const districtsInitialValue = [{ key: "Todos los distritos", value: 0 }];
 
+const useStyles = makeStyles((theme) => ({
+  dropdown: {
+    // margin: theme.spacing(1),
+    width: "100%",
+  },
+}));
+
 function LocationForm(props) {
+  const classes = useStyles();
+
   const [regionOptions, setRegionOptions] = useState(regionsInitialValue);
   const [regionsAreLoading, setRegionsAreLoading] = useState(false);
   const [districtOptions, setDistrictOptions] = useState(districtsInitialValue);
   const [districtsAreLoading, setDistrictsAreLoading] = useState(false);
 
-  const generateDropdown = (name, label, options, onChange, isLoading) => (
+  const generateDropdown = (
+    name,
+    label,
+    options,
+    onChange,
+    isLoading,
+    value
+  ) => (
     <>
-      <label htmlFor={name}>{label}</label>
-      <select name={name} id={name} onChange={onChange} disabled={isLoading}>
+      <InputLabel id="demo-simple-select-label">{label}</InputLabel>
+      <Select
+        value={value}
+        name={name}
+        id={name}
+        onChange={onChange}
+        disabled={isLoading}
+        className={classes.dropdown}
+      >
         {options.map((option) => (
-          <option key={option.key} value={option.value}>
+          <MenuItem key={option.key} value={option.value}>
             {option.key}
-          </option>
+          </MenuItem>
         ))}
-      </select>
+      </Select>
     </>
   );
 
   const handleDepartmentChange = (e) => {
-    const departmentId = e.currentTarget.value;
+    const departmentId = e.target.value;
+    console.log(departmentId);
     props.setSelectedDepartment(departmentId);
     setRegionsAreLoading(true);
     api.getRegionsByDepartmentId(departmentId).then((response) => {
@@ -43,7 +71,7 @@ function LocationForm(props) {
   };
 
   const handleRegionChange = (e) => {
-    const regionId = e.currentTarget.value;
+    const regionId = e.target.value;
     props.setSelectedRegion(regionId);
     setDistrictsAreLoading(true);
     api.getDistrictsByRegionId(regionId).then((response) => {
@@ -72,7 +100,8 @@ function LocationForm(props) {
             "Departamento",
             departmentOptions,
             handleDepartmentChange,
-            false
+            false,
+            props.selectedDepartment
           )}
         </li>
         <li className="create-ad-form-location-dropdown">
@@ -81,7 +110,8 @@ function LocationForm(props) {
             "Región",
             regionOptions,
             handleRegionChange,
-            regionsAreLoading
+            regionsAreLoading,
+            props.selectedRegion
           )}
         </li>
         <li className="create-ad-form-location-dropdown">
@@ -90,7 +120,8 @@ function LocationForm(props) {
             "Distrito",
             districtOptions,
             handleDistrictChange,
-            districtsAreLoading
+            districtsAreLoading,
+            props.selectedDistrict
           )}
         </li>
       </ul>
