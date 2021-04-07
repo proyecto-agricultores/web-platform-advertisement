@@ -62,7 +62,7 @@ function CreateAd() {
       <AppBar />
       <div className="create-ad-form-container">
         <div className="create-ad-form">
-          <h3>Audiencia</h3>
+          <h3>Paso 1: Calcular audiencia</h3>
           <LocationForm
             setSelectedDepartment={setSelectedDepartment}
             setSelectedRegion={setSelectedRegion}
@@ -86,6 +86,8 @@ function CreateAd() {
               </Form>
             )}
           </Formik>
+          <h3>Paso 2: Subir datos de su anuncio</h3>
+          <h3>Paso ¡Subir anuncio!</h3>
         </div>
       </div>
     </>
