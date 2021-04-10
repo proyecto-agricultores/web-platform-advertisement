@@ -13,7 +13,13 @@ const districtsInitialValue = [{ key: "Todos los distritos", value: 0 }];
 
 const useStyles = makeStyles((theme) => ({
   dropdown: {
-    // margin: theme.spacing(1),
+    width: "100%",
+  },
+  title: {
+    backgroundColor: theme.palette.secondary.main,
+    borderRadius: "20px",
+    paddingLeft: "10px",
+    color: "white",
     width: "100%",
   },
 }));
@@ -92,7 +98,7 @@ function LocationForm(props) {
 
   return (
     <div className="create-ad-form-location-container">
-      <h4>Zona</h4>
+      <h3 className={classes.title}>Zona</h3>
       <ul className="create-ad-form-location-dropdowns">
         <li className="create-ad-form-location-dropdown">
           {generateDropdown(

@@ -8,8 +8,23 @@ import departmentOptions from "../../data/departments.json";
 import LocationForm from "../../components/AdAudienceForm/LocationForm";
 import api from "../../services/api";
 import AppBar from "../../components/AppBar/AppBar";
+import { makeStyles } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  steps: {
+    color: "white",
+    backgroundColor: theme.palette.primary.main,
+    paddingLeft: "10px",
+    borderRadius: "20px",
+    width: "100%",
+  },
+  mainDiv: {
+    width: "100%",
+  },
+}));
 
 function CreateAd() {
+  const classes = useStyles();
   // const [loadingSupplies, setLoadingSupplies] = useState(true);
   const [selectedDepartment, setSelectedDepartment] = useState("0");
   const [selectedRegion, setSelectedRegion] = useState("0");
@@ -52,9 +67,18 @@ function CreateAd() {
 
   const onSumbit = (values) => {
     console.log("Form data", values);
-    console.log(selectedDepartment);
-    console.log(selectedRegion);
-    console.log(selectedDistrict);
+  };
+
+  const selectAllSupplies = (setValues, values) => {
+    const allValues = [];
+    for (let i = 1; i <= supplyOptions.length; ++i) {
+      allValues.push(i.toString());
+    }
+    setValues({ ...values, supplyOption: allValues });
+  };
+
+  const deselectAllSupplies = (setValues, values) => {
+    setValues({ ...values, supplyOption: [] });
   };
 
   return (
@@ -62,7 +86,8 @@ function CreateAd() {
       <AppBar />
       <div className="create-ad-form-container">
         <div className="create-ad-form">
-          <h3>Paso 1: Calcular audiencia</h3>
+          <h2 className={classes.steps}>Paso 1: Calcular audiencia</h2>
+          <hr />
           <LocationForm
             selectedDepartment={selectedDepartment}
             setSelectedDepartment={setSelectedDepartment}
@@ -71,26 +96,29 @@ function CreateAd() {
             selectedDistrict={selectedDistrict}
             setSelectedDistrict={setSelectedDistrict}
           />
+          <hr />
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={onSumbit}
           >
             {(formik) => (
-              <Form onSubmit={formik.handleSubmit}>
+              <Form className={classes.mainDiv} onSubmit={formik.handleSubmit}>
                 <AdAudienceForm
                   publicationTypeOptions={publicationTypeOptions}
                   supplyOptions={supplyOptions}
                   departmentOptions={departmentOptions}
                   areaUnitOptions={areaUnitOptions}
                   formik={formik}
+                  selectAllSupplies={selectAllSupplies}
+                  deselectAllSupplies={deselectAllSupplies}
                 />
                 <button type="submit">Calcular audiencia</button>
               </Form>
             )}
           </Formik>
-          <h3>Paso 2: Subir datos de su anuncio</h3>
-          <h3>Paso ¡Subir anuncio!</h3>
+          <h2 className={classes.steps}>Paso 2: Subir datos de su anuncio</h2>
+          <h2 className={classes.steps}>Paso 3: ¡Subir anuncio!</h2>
         </div>
       </div>
     </>

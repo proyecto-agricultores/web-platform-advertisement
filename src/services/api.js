@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://dev-cosecha-pr-32.herokuapp.com";
+const BASE_URL = "https://dev-cosecha-pr-43.herokuapp.com";
 
 axios.interceptors.request.use(
   (config) => {
