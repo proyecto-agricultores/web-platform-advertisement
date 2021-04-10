@@ -14,6 +14,7 @@ const districtsInitialValue = [{ key: "Todos los distritos", value: 0 }];
 const useStyles = makeStyles((theme) => ({
   dropdown: {
     width: "100%",
+    "&:active": {},
   },
   title: {
     backgroundColor: theme.palette.secondary.main,
@@ -61,7 +62,6 @@ function LocationForm(props) {
 
   const handleDepartmentChange = (e) => {
     const departmentId = e.target.value;
-    console.log(departmentId);
     props.setSelectedDepartment(departmentId);
     setRegionsAreLoading(true);
     api.getRegionsByDepartmentId(departmentId).then((response) => {
@@ -70,8 +70,13 @@ function LocationForm(props) {
         return { key: key, value: value };
       });
       newRegions.unshift(regionsInitialValue[0]);
+
+      props.setSelectedRegion(0);
       setRegionOptions(newRegions);
+
+      props.setSelectedDistrict(0);
       setDistrictOptions(districtsInitialValue);
+
       setRegionsAreLoading(false);
     });
   };
@@ -92,7 +97,7 @@ function LocationForm(props) {
   };
 
   const handleDistrictChange = (e) => {
-    const districtId = e.currentTarget.value;
+    const districtId = e.target.value;
     props.setSelectedDistrict(districtId);
   };
 

@@ -48,12 +48,16 @@ const api = {
     return axios.get(`${BASE_URL}/supplys/`);
   },
   getRegionsByDepartmentId: (departmentId) => {
-    return axios.get(
-      `${BASE_URL}/api/filter/regions/?department=${departmentId}`
-    );
+    if (departmentId !== 0) {
+      return axios.get(
+        `${BASE_URL}/api/filter/regions/?department=${departmentId}`
+      );
+    }
   },
   getDistrictsByRegionId: (regionId) => {
-    return axios.get(`${BASE_URL}/api/filter/districts/?region=${regionId}`);
+    if (regionId !== 0) {
+      return axios.get(`${BASE_URL}/api/filter/districts/?region=${regionId}`);
+    }
   },
 };
 

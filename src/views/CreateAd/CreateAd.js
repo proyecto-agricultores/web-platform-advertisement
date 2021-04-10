@@ -26,9 +26,9 @@ const useStyles = makeStyles((theme) => ({
 function CreateAd() {
   const classes = useStyles();
   // const [loadingSupplies, setLoadingSupplies] = useState(true);
-  const [selectedDepartment, setSelectedDepartment] = useState("0");
-  const [selectedRegion, setSelectedRegion] = useState("0");
-  const [selectedDistrict, setSelectedDistrict] = useState("0");
+  const [selectedDepartment, setSelectedDepartment] = useState(0);
+  const [selectedRegion, setSelectedRegion] = useState(0);
+  const [selectedDistrict, setSelectedDistrict] = useState(0);
   const [supplyOptions, setSupplyOptions] = useState([]);
 
   useEffect(() => {
