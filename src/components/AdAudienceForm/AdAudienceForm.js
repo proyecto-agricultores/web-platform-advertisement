@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     listStyle: "none",
     padding: 0,
     margin: 0,
+    width: "40%",
   },
   suppliesSelectButtons: {
     textAlign: "center",
@@ -38,6 +39,15 @@ const useStyles = makeStyles((theme) => ({
   liDate: {
     width: "200px",
     margin: "10px 0px",
+  },
+  divDates: {
+    display: "flex",
+    flexFlow: "row wrap",
+    justifyContent: "space-evenly",
+  },
+  separator: {
+    width: "1px",
+    backgroundColor: "black",
   },
 }));
 
@@ -86,36 +96,41 @@ function AdAudienceForm(props) {
       </div>
       <hr />
       <h3 className={classes.title}>Fechas</h3>
-      <ul className={classes.flexDate}>
-        <li className={classes.liDate}>
-          <FormikControl
-            control="date"
-            label="Fecha inicial de siembra"
-            name="sowingInitialDate"
-          />
-        </li>
-        <li className={classes.liDate}>
-          <FormikControl
-            control="date"
-            label="Fecha final de siembra"
-            name="sowingFinalDate"
-          />
-        </li>
-        <li className={classes.liDate}>
-          <FormikControl
-            control="date"
-            label="Fecha inicial de cosecha"
-            name="harvestInitialDate"
-          />
-        </li>
-        <li className={classes.liDate}>
-          <FormikControl
-            control="date"
-            label="Fecha final de cosecha"
-            name="harvestFinalDate"
-          />
-        </li>
-      </ul>
+      <div className={classes.divDates}>
+        <ul className={classes.flexDate}>
+          <li className={classes.liDate}>
+            <FormikControl
+              control="date"
+              label="Fecha inicial de siembra"
+              name="sowingInitialDate"
+            />
+          </li>
+          <li className={classes.liDate}>
+            <FormikControl
+              control="date"
+              label="Fecha final de siembra"
+              name="sowingFinalDate"
+            />
+          </li>
+        </ul>
+        <div className={classes.separator} />
+        <ul className={classes.flexDate}>
+          <li className={classes.liDate}>
+            <FormikControl
+              control="date"
+              label="Fecha inicial de cosecha"
+              name="harvestInitialDate"
+            />
+          </li>
+          <li className={classes.liDate}>
+            <FormikControl
+              control="date"
+              label="Fecha final de cosecha"
+              name="harvestFinalDate"
+            />
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }

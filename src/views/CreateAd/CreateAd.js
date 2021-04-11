@@ -21,6 +21,21 @@ const useStyles = makeStyles((theme) => ({
   mainDiv: {
     width: "100%",
   },
+  submitButton: {
+    textAlign: "center",
+    fontFamily: "Poppins",
+    backgroundColor: theme.palette.primary.main,
+    border: 0,
+    color: "white",
+    borderRadius: "10px",
+    outline: "none",
+    margin: "5px 0",
+    fontSize: "15px",
+  },
+  center: {
+    display: "flex",
+    justifyContent: "space-evenly",
+  },
 }));
 
 function CreateAd() {
@@ -113,7 +128,12 @@ function CreateAd() {
                   selectAllSupplies={selectAllSupplies}
                   deselectAllSupplies={deselectAllSupplies}
                 />
-                <button type="submit">Calcular audiencia</button>
+                <hr />
+                <div className={classes.center}>
+                  <button className={classes.submitButton} type="submit">
+                    Calcular audiencia
+                  </button>
+                </div>
               </Form>
             )}
           </Formik>
