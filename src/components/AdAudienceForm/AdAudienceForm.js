@@ -2,6 +2,8 @@ import { makeStyles } from "@material-ui/core";
 import React from "react";
 import FormikControl from "../Formik/FormikControl";
 
+import "./AdAudienceForm.css";
+
 const useStyles = makeStyles((theme) => ({
   title: {
     color: "white",
@@ -12,8 +14,11 @@ const useStyles = makeStyles((theme) => ({
   },
   flexDate: {
     display: "flex",
-    flexWrap: "wrap",
+    flexFlow: "row wrap",
     justifyContent: "space-evenly",
+    listStyle: "none",
+    padding: 0,
+    margin: 0,
   },
   suppliesSelectButtons: {
     textAlign: "center",
@@ -29,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "space-evenly",
+  },
+  liDate: {
+    width: "200px",
+    margin: "10px 0px",
   },
 }));
 
@@ -77,28 +86,36 @@ function AdAudienceForm(props) {
       </div>
       <hr />
       <h3 className={classes.title}>Fechas</h3>
-      <div className={classes.flexDate}>
-        <FormikControl
-          control="date"
-          label="Fecha inicial de siembra"
-          name="sowingInitialDate"
-        />
-        <FormikControl
-          control="date"
-          label="Fecha final de siembra"
-          name="sowingFinalDate"
-        />
-        <FormikControl
-          control="date"
-          label="Fecha inicial de cosecha"
-          name="harvestInitialDate"
-        />
-        <FormikControl
-          control="date"
-          label="Fecha final de cosecha"
-          name="harvestFinalDate"
-        />
-      </div>
+      <ul className={classes.flexDate}>
+        <li className={classes.liDate}>
+          <FormikControl
+            control="date"
+            label="Fecha inicial de siembra"
+            name="sowingInitialDate"
+          />
+        </li>
+        <li className={classes.liDate}>
+          <FormikControl
+            control="date"
+            label="Fecha final de siembra"
+            name="sowingFinalDate"
+          />
+        </li>
+        <li className={classes.liDate}>
+          <FormikControl
+            control="date"
+            label="Fecha inicial de cosecha"
+            name="harvestInitialDate"
+          />
+        </li>
+        <li className={classes.liDate}>
+          <FormikControl
+            control="date"
+            label="Fecha final de cosecha"
+            name="harvestFinalDate"
+          />
+        </li>
+      </ul>
     </div>
   );
 }
