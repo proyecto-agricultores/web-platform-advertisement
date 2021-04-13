@@ -1,12 +1,13 @@
-import React, { useRef } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Formik, Form } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 import "./AdInfoForm.css";
 import FormikControl from "../Formik/FormikControl";
 import useButtonStyles from "../../styles/useButtonStyles";
 import useGlobalStyles from "../../styles/useGlobalStyles";
+import TextError from "../Formik/TextError";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -18,23 +19,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
+
 function AdInfoForm() {
   const classes = useStyles();
   const buttonStyles = useButtonStyles();
   const globalStyles = useGlobalStyles();
-  // const fileRef = useRef(null);
   let fileRef = "";
 
   const initialValues = {
     name: "",
     url: "",
-    image: null,
+    file: null,
   };
 
   const validationSchema = Yup.object({
     name: Yup.string().required("Campo requerido."),
     url: Yup.string().required("Campo requerido"),
-    image: Yup.mixed().required("Campo requerido"),
+    file: Yup.mixed()
+      .required("Campo requerido")
+      .test(
+        "fileType",
+        "Archivo no soportado",
+        (value) => value && SUPPORTED_FORMATS.includes(value.type)
+      ),
   });
 
   const onSubmit = (values) => {
@@ -65,7 +73,7 @@ function AdInfoForm() {
                 name="file"
                 type="file"
                 onChange={(event) => {
-                  formik.setFieldValue("image", event.currentTarget.files[0]);
+                  formik.setFieldValue("file", event.currentTarget.files[0]);
                 }}
                 className="image-control"
                 ref={(file) => (fileRef = file)}
@@ -73,10 +81,12 @@ function AdInfoForm() {
               <button
                 onClick={() => fileRef.click()}
                 type="button"
-                className={buttonStyles.root}
+                className={buttonStyles.submitButton}
               >
                 Subir imagen
-              </button>
+              </button>{" "}
+              {formik.values.file && formik.values.file.name}
+              <ErrorMessage component={TextError} name={"file"} />
             </div>
             <div className={globalStyles.center}>
               <button className={buttonStyles.submitButton} type="submit">

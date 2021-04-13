@@ -78,7 +78,7 @@ function CreateAd(props) {
 
   const validationSchema = Yup.object({
     publicationTypeOption: Yup.array().min(1, "Elija al menos una opción."),
-    supplyTypeOption: Yup.array().min(1, "Elija al menos una opción."),
+    supplyOption: Yup.array().min(1, "Elija al menos una opción."),
   });
 
   const formatDate = (date) => {
@@ -185,7 +185,7 @@ function CreateAd(props) {
                 <hr />
                 <div className={globalStyles.center}>
                   <button className={buttonStyles.submitButton} type="submit">
-                    Calcular audiencia
+                    Generar audiencia para mi anuncio
                   </button>
                 </div>
               </Form>
