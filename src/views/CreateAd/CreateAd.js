@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import "./CreateAd.css";
 import AdAudienceForm from "../../components/AdAudienceForm/AdAudienceForm";
 import departmentOptions from "../../data/departments.json";
-import LocationForm from "../../components/AdAudienceForm/LocationForm";
+import LocationForm from "../../components/AdLocationDropdown/LocationForm";
 import api from "../../services/api";
 import AppBar from "../../components/AppBar/AppBar";
 import { makeStyles } from "@material-ui/core";
@@ -204,7 +204,7 @@ function CreateAd(props) {
           </Formik>
           <h3>
             Audiencia total:{" "}
-            {totalAudience ? totalAudience : "Todavía no ha sido calculada"}
+            {totalAudience ? totalAudience : "No calculada aún."}
           </h3>
           <h2 className={classes.steps}>Paso 2: Subir datos de su anuncio</h2>
           <h2 className={classes.steps}>Paso 3: ¡Subir anuncio!</h2>
