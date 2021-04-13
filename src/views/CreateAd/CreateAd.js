@@ -9,6 +9,7 @@ import LocationForm from "../../components/AdAudienceForm/LocationForm";
 import api from "../../services/api";
 import AppBar from "../../components/AppBar/AppBar";
 import { makeStyles } from "@material-ui/core";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   steps: {
@@ -38,23 +39,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function CreateAd() {
+function CreateAd(props) {
   const classes = useStyles();
   // const [loadingSupplies, setLoadingSupplies] = useState(true);
   const [selectedDepartment, setSelectedDepartment] = useState(0);
   const [selectedRegion, setSelectedRegion] = useState(0);
   const [selectedDistrict, setSelectedDistrict] = useState(0);
   const [supplyOptions, setSupplyOptions] = useState([]);
+  const [totalAudience, setTotalAudience] = useState(null);
+  const history = useHistory();
 
   useEffect(() => {
-    api.supplies().then((response) => {
-      const supplies = response.data.map((supply) => {
-        const { id: value, name: key } = supply;
-        return { key: key, value: value.toString() };
+    api
+      .supplies()
+      .then((response) => {
+        const supplies = response.data.map((supply) => {
+          const { id: value, name: key } = supply;
+          return { key: key, value: value.toString() };
+        });
+        setSupplyOptions(supplies);
+      })
+      .catch((error) => {
+        console.log(error);
+        history.push("/");
       });
-      setSupplyOptions(supplies);
-    });
-  }, []);
+    return;
+  }, [history]);
 
   const publicationTypeOptions = [
     { key: "Cultivo", value: "cultivo" },
@@ -80,8 +90,52 @@ function CreateAd() {
     supplyTypeOption: Yup.array().min(1, "Elija al menos una opción."),
   });
 
+  const formatDate = (date) => {
+    const month = date.getMonth() + 1;
+    return `${date.getDate()}/${month}/${date
+      .getFullYear()
+      .toString()
+      .slice(-2)} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+  };
+
+  const defaultDate = () => "1/1/20 0:0:0";
+
   const onSumbit = (values) => {
-    console.log("Form data", values);
+    console.log(values);
+    api
+      .calculateAudience({
+        departmentId: selectedDepartment,
+        regionId: selectedRegion,
+        districtId: selectedDistrict,
+        forOrders: values.publicationTypeOption.includes("pedido")
+          ? true
+          : false,
+        forPublications: values.publicationTypeOption.includes("cultivo")
+          ? true
+          : false,
+        beginningSowingDate: values.sowingInitialDate
+          ? formatDate(values.sowingInitialDate)
+          : defaultDate(),
+        endingSowingDate: values.sowingFinalDate
+          ? formatDate(values.sowingFinalDate)
+          : defaultDate(),
+        beginningHarvestDate: values.harvestInitialDate
+          ? formatDate(values.harvestInitialDate)
+          : defaultDate(),
+        endingHarvestDate: values.harvestFinalDate
+          ? formatDate(values.harvestFinalDate)
+          : defaultDate(),
+        supplies: values.supplyOption.map((option) => {
+          console.log(option);
+          return parseInt(option, 10);
+        }),
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const selectAllSupplies = (setValues, values) => {
@@ -94,6 +148,16 @@ function CreateAd() {
 
   const deselectAllSupplies = (setValues, values) => {
     setValues({ ...values, supplyOption: [] });
+  };
+
+  const resetDates = (setValues, values) => {
+    setValues({
+      ...values,
+      sowingInitialDate: null,
+      sowingFinalDate: null,
+      harvestInitialDate: null,
+      harvestFinalDate: null,
+    });
   };
 
   return (
@@ -127,6 +191,7 @@ function CreateAd() {
                   formik={formik}
                   selectAllSupplies={selectAllSupplies}
                   deselectAllSupplies={deselectAllSupplies}
+                  resetDates={resetDates}
                 />
                 <hr />
                 <div className={classes.center}>
@@ -137,6 +202,10 @@ function CreateAd() {
               </Form>
             )}
           </Formik>
+          <h3>
+            Audiencia total:{" "}
+            {totalAudience ? totalAudience : "Todavía no ha sido calculada"}
+          </h3>
           <h2 className={classes.steps}>Paso 2: Subir datos de su anuncio</h2>
           <h2 className={classes.steps}>Paso 3: ¡Subir anuncio!</h2>
         </div>

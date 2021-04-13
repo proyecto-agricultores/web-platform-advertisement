@@ -20,6 +20,7 @@ function DatePicker(props) {
               id={name}
               {...field}
               {...rest}
+              dateFormat="dd/MM/yyyy"
               selected={value}
               onChange={(val) => setFieldValue(name, val)}
             />

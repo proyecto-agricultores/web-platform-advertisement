@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
     width: "40%",
   },
-  suppliesSelectButtons: {
+  orangeButton: {
     textAlign: "center",
     fontFamily: "Poppins",
     borderColor: theme.palette.secondary.main,
@@ -29,9 +29,9 @@ const useStyles = makeStyles((theme) => ({
     width: "225px",
     borderRadius: "20px",
     outline: "none",
-    marginBottom: "5px",
+    margin: "5px 0",
   },
-  flexSupplyButtons: {
+  flexButtons: {
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "space-evenly",
@@ -71,10 +71,10 @@ function AdAudienceForm(props) {
         name="supplyOption"
         options={props.supplyOptions}
       />
-      <div className={classes.flexSupplyButtons}>
+      <div className={classes.flexButtons}>
         <button
           type="button"
-          className={classes.suppliesSelectButtons}
+          className={classes.orangeButton}
           onClick={() =>
             props.selectAllSupplies(props.formik.setValues, props.formik.values)
           }
@@ -83,7 +83,7 @@ function AdAudienceForm(props) {
         </button>
         <button
           type="button"
-          className={classes.suppliesSelectButtons}
+          className={classes.orangeButton}
           onClick={() =>
             props.deselectAllSupplies(
               props.formik.setValues,
@@ -130,6 +130,17 @@ function AdAudienceForm(props) {
             />
           </li>
         </ul>
+      </div>
+      <div className={classes.flexButtons}>
+        <button
+          type="button"
+          className={classes.orangeButton}
+          onClick={() =>
+            props.resetDates(props.formik.setValues, props.formik.values)
+          }
+        >
+          Limpiar fechas
+        </button>
       </div>
     </div>
   );

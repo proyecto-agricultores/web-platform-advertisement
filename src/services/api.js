@@ -59,6 +59,37 @@ const api = {
       return axios.get(`${BASE_URL}/api/filter/districts/?region=${regionId}`);
     }
   },
+  calculateAudience: ({
+    departmentId,
+    regionId,
+    districtId,
+    forOrders,
+    forPublications,
+    beginningSowingDate,
+    endingSowingDate,
+    beginningHarvestDate,
+    endingHarvestDate,
+    supplies,
+  }) => {
+    const body = {
+      department_id: departmentId,
+      region_id: regionId,
+      district_id: districtId,
+      for_orders: forOrders,
+      for_publications: forPublications,
+      beginning_sowing_date: beginningSowingDate,
+      ending_sowing_date: endingSowingDate,
+      beginning_harvest_date: beginningHarvestDate,
+      ending_harvest_date: endingHarvestDate,
+      supplies: supplies,
+    };
+    const options = {
+      method: "get",
+      url: `${BASE_URL}/estimatePublic/`,
+      data: body,
+    };
+    return axios(options);
+  },
 };
 
 export default api;
