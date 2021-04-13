@@ -3,6 +3,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
 
 import api from "../../services/api";
 import departmentOptions from "../../data/departments.json";
@@ -27,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 function LocationForm(props) {
   const classes = useStyles();
+  const history = useHistory();
 
   const [regionOptions, setRegionOptions] = useState(regionsInitialValue);
   const [regionsAreLoading, setRegionsAreLoading] = useState(false);
@@ -64,36 +66,49 @@ function LocationForm(props) {
     const departmentId = e.target.value;
     props.setSelectedDepartment(departmentId);
     setRegionsAreLoading(true);
-    api.getRegionsByDepartmentId(departmentId).then((response) => {
-      const newRegions = response.data.map((region) => {
-        const { id: value, name: key } = region;
-        return { key: key, value: value };
+    api
+      .getRegionsByDepartmentId(departmentId)
+      .then((response) => {
+        const newRegions = response.data.map((region) => {
+          const { id: value, name: key } = region;
+          return { key: key, value: value };
+        });
+        newRegions.unshift(regionsInitialValue[0]);
+
+        props.setSelectedRegion(0);
+        setRegionOptions(newRegions);
+
+        props.setSelectedDistrict(0);
+        setDistrictOptions(districtsInitialValue);
+
+        setRegionsAreLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        history.push("/");
       });
-      newRegions.unshift(regionsInitialValue[0]);
-
-      props.setSelectedRegion(0);
-      setRegionOptions(newRegions);
-
-      props.setSelectedDistrict(0);
-      setDistrictOptions(districtsInitialValue);
-
-      setRegionsAreLoading(false);
-    });
   };
 
   const handleRegionChange = (e) => {
     const regionId = e.target.value;
     props.setSelectedRegion(regionId);
     setDistrictsAreLoading(true);
-    api.getDistrictsByRegionId(regionId).then((response) => {
-      const newDistricts = response.data.map((district) => {
-        const { id: value, name: key } = district;
-        return { key: key, value: value };
+    api
+      .getDistrictsByRegionId(regionId)
+      .then((response) => {
+        const newDistricts = response.data.map((district) => {
+          const { id: value, name: key } = district;
+          return { key: key, value: value };
+        });
+        props.setSelectedDistrict(0);
+        newDistricts.unshift(districtsInitialValue[0]);
+        setDistrictOptions(newDistricts);
+        setDistrictsAreLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        history.push("/");
       });
-      newDistricts.unshift(districtsInitialValue[0]);
-      setDistrictOptions(newDistricts);
-      setDistrictsAreLoading(false);
-    });
   };
 
   const handleDistrictChange = (e) => {
