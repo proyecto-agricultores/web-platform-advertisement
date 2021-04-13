@@ -10,6 +10,9 @@ import api from "../../services/api";
 import AppBar from "../../components/AppBar/AppBar";
 import { makeStyles } from "@material-ui/core";
 import { useHistory } from "react-router";
+import AdInfoForm from "../../components/AdInfoForm/AdInfoForm";
+import useButtonStyles from "../../styles/useButtonStyles";
+import useGlobalStyles from "../../styles/useGlobalStyles";
 
 const useStyles = makeStyles((theme) => ({
   steps: {
@@ -22,21 +25,6 @@ const useStyles = makeStyles((theme) => ({
   mainDiv: {
     width: "100%",
   },
-  submitButton: {
-    textAlign: "center",
-    fontFamily: "Poppins",
-    backgroundColor: theme.palette.primary.main,
-    border: 0,
-    color: "white",
-    borderRadius: "10px",
-    outline: "none",
-    margin: "5px 0",
-    fontSize: "15px",
-  },
-  center: {
-    display: "flex",
-    justifyContent: "space-evenly",
-  },
 }));
 
 function CreateAd(props) {
@@ -48,6 +36,9 @@ function CreateAd(props) {
   const [supplyOptions, setSupplyOptions] = useState([]);
   const [totalAudience, setTotalAudience] = useState(null);
   const history = useHistory();
+
+  const buttonStyles = useButtonStyles();
+  const globalStyles = useGlobalStyles();
 
   useEffect(() => {
     api
@@ -166,7 +157,6 @@ function CreateAd(props) {
       <div className="create-ad-form-container">
         <div className="create-ad-form">
           <h2 className={classes.steps}>Paso 1: Calcular audiencia</h2>
-          <hr />
           <LocationForm
             selectedDepartment={selectedDepartment}
             setSelectedDepartment={setSelectedDepartment}
@@ -175,7 +165,6 @@ function CreateAd(props) {
             selectedDistrict={selectedDistrict}
             setSelectedDistrict={setSelectedDistrict}
           />
-          <hr />
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -194,8 +183,8 @@ function CreateAd(props) {
                   resetDates={resetDates}
                 />
                 <hr />
-                <div className={classes.center}>
-                  <button className={classes.submitButton} type="submit">
+                <div className={globalStyles.center}>
+                  <button className={buttonStyles.submitButton} type="submit">
                     Calcular audiencia
                   </button>
                 </div>
@@ -206,8 +195,9 @@ function CreateAd(props) {
             Audiencia total:{" "}
             {totalAudience ? totalAudience : "No calculada aún."}
           </h3>
-          <h2 className={classes.steps}>Paso 2: Subir datos de su anuncio</h2>
-          <h2 className={classes.steps}>Paso 3: ¡Subir anuncio!</h2>
+          <h2 className={classes.steps}>Paso 2: Datos de su anuncio</h2>
+          <AdInfoForm />
+          <h2 className={classes.steps}>Paso 3: Comprar créditos</h2>
         </div>
       </div>
     </>

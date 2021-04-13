@@ -63,7 +63,6 @@ function AdAudienceForm(props) {
         name="publicationTypeOption"
         options={props.publicationTypeOptions}
       />
-      <hr />
       <h3 className={classes.title}>Insumo</h3>
       <FormikControl
         control="checkbox"
@@ -94,7 +93,6 @@ function AdAudienceForm(props) {
           Deseleccionar todos
         </button>
       </div>
-      <hr />
       <h3 className={classes.title}>Fechas</h3>
       <div className={classes.divDates}>
         <ul className={classes.flexDate}>
