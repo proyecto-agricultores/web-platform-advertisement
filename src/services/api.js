@@ -4,7 +4,6 @@ import qs from "qs";
 const BASE_URL = "https://dev-cosecha-pr-43.herokuapp.com";
 
 const ApiWithToken = axios.create({
-  baseURL: BASE_URL,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
@@ -97,6 +96,16 @@ const api = {
         ending_harvest_date: endingHarvestDate,
         supplies: supplies,
       },
+    });
+  },
+  createUser: ({ firstName, lastName, phoneNumber, dni, ruc, password }) => {
+    return axios.post(`${BASE_URL}/users/`, {
+      first_name: firstName,
+      last_name: lastName,
+      phone_number: phoneNumber,
+      dni: dni,
+      ruc: ruc,
+      password: password,
     });
   },
 };

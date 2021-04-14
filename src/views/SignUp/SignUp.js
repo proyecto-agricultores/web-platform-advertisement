@@ -10,6 +10,7 @@ import LocationForm from "../../components/AdLocationDropdown/LocationForm";
 import Textfield from "../../components/Formik/TextField";
 import Button from "../../components/Formik/Button";
 import File from "../../components/Formik/File";
+import api from "../../services/api";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -122,6 +123,10 @@ const SignUp = () => {
                     setAlertIsOpen(true);
                     return;
                   }
+                  // api.createUser({
+                  //   ...values
+
+                  // });
                 }}
               >
                 {(formik) => (
