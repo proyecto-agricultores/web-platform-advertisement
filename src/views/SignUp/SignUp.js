@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Box, Container, Grid, Snackbar, Typography } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
+import { Box, Container, Grid, Typography } from "@material-ui/core";
 import MuiPhoneNumber from "material-ui-phone-number";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -10,11 +9,8 @@ import LocationForm from "../../components/AdLocationDropdown/LocationForm";
 import Textfield from "../../components/Formik/TextField";
 import Button from "../../components/Formik/Button";
 import File from "../../components/Formik/File";
+import Snackbar from "../../components/Utils/Snackbar/Snackbar";
 import api from "../../services/api";
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -186,17 +182,11 @@ const SignUp = () => {
                           isSignUp={true}
                         />
                         <Snackbar
-                          open={alertIsOpen}
-                          autoHideDuration={6000}
-                          onClose={() => setAlertIsOpen(false)}
-                        >
-                          <Alert
-                            onClose={() => setAlertIsOpen(false)}
-                            severity="error"
-                          >
-                            Seleccione su zona
-                          </Alert>
-                        </Snackbar>
+                          alertIsOpen={alertIsOpen}
+                          setAlertIsOpen={setAlertIsOpen}
+                          text="Elija su zona"
+                          severity="error"
+                        />
                       </Grid>
                       <Grid
                         item
