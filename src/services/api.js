@@ -108,6 +108,12 @@ const api = {
       password: password,
     });
   },
+  generateTwilioCode: () => {
+    return ApiWithToken.get(`${BASE_URL}/phoneVerification/`);
+  },
+  sendTwilioCode: (code) => {
+    return ApiWithToken.post(`${BASE_URL}/phoneVerification/`, { code: code });
+  },
 };
 
 export default api;
