@@ -180,12 +180,6 @@ const SignUp = () => {
                       </Grid>
                       <Grid item xs={12} container justify="center">
                         <Button>CREAR USUARIO</Button>
-                        {/* <button
-                          type="submit"
-                          onClick={() => formik.handleSubmit()}
-                        >
-                          CREAR
-                        </button> */}
                       </Grid>
                     </Grid>
                   </Form>
