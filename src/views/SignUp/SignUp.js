@@ -40,6 +40,7 @@ const INITIAL_FORM_STATE = {
   password: "",
   dni: "",
   ruc: "",
+  file: null,
 };
 
 const dniOrRucValidation = (name) =>
@@ -72,7 +73,7 @@ const FORM_VALIDATION = Yup.object().shape(
     file: Yup.mixed().test(
       "fileType",
       "Archivo no soportado",
-      (value) => value && SUPPORTED_FORMATS.includes(value.type)
+      (value) => !value || (value && SUPPORTED_FORMATS.includes(value.type))
     ),
   },
   ["dni", "ruc"]
