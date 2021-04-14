@@ -37,7 +37,7 @@ const AppBar = () => {
               Mis anuncios
             </Button>
           </Link>
-          <Link to="/ad" style={{ textDecoration: "none" }}>
+          <Link to="/createAd" style={{ textDecoration: "none" }}>
             <Button color="default" className={classes.link}>
               Crear anuncio
             </Button>

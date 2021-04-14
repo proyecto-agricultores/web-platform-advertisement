@@ -1,6 +1,11 @@
 import axios from "axios";
+import qs from "qs";
 
 const BASE_URL = "https://dev-cosecha-pr-43.herokuapp.com";
+
+axios.defaults.paramsSerializer = (params) => {
+  return qs.stringify(params, { indices: false }); // param=value1&param=value2
+};
 
 axios.interceptors.request.use(
   (config) => {
@@ -71,24 +76,20 @@ const api = {
     endingHarvestDate,
     supplies,
   }) => {
-    const body = {
-      department_id: departmentId,
-      region_id: regionId,
-      district_id: districtId,
-      for_orders: forOrders,
-      for_publications: forPublications,
-      beginning_sowing_date: beginningSowingDate,
-      ending_sowing_date: endingSowingDate,
-      beginning_harvest_date: beginningHarvestDate,
-      ending_harvest_date: endingHarvestDate,
-      supplies: supplies,
-    };
-    const options = {
-      method: "get",
-      url: `${BASE_URL}/estimatePublic/`,
-      data: body,
-    };
-    return axios(options);
+    return axios.get(`${BASE_URL}/estimatePublic/`, {
+      params: {
+        department_id: departmentId,
+        region_id: regionId,
+        district_id: districtId,
+        for_orders: forOrders,
+        for_publications: forPublications,
+        beginning_sowing_date: beginningSowingDate,
+        ending_sowing_date: endingSowingDate,
+        beginning_harvest_date: beginningHarvestDate,
+        ending_harvest_date: endingHarvestDate,
+        supplies: supplies,
+      },
+    });
   },
 };
 

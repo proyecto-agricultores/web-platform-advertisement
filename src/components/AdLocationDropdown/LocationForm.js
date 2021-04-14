@@ -85,7 +85,9 @@ function LocationForm(props) {
       })
       .catch((error) => {
         console.log(error);
-        history.push("/");
+        if (error.response?.status === 401) {
+          history.push("/");
+        }
       });
   };
 
@@ -107,7 +109,9 @@ function LocationForm(props) {
       })
       .catch((error) => {
         console.log(error);
-        history.push("/");
+        if (error.response?.status === 401) {
+          history.push("/");
+        }
       });
   };
 

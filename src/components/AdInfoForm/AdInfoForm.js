@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -25,6 +25,8 @@ function AdInfoForm() {
   const classes = useStyles();
   const buttonStyles = useButtonStyles();
   const globalStyles = useGlobalStyles();
+
+  const [isLoading, setIsLoading] = useState(false);
   let fileRef = "";
 
   const initialValues = {
@@ -46,7 +48,9 @@ function AdInfoForm() {
   });
 
   const onSubmit = (values) => {
+    setIsLoading(true);
     console.log("Form data", values);
+    setIsLoading(false);
   };
 
   return (
@@ -83,13 +87,17 @@ function AdInfoForm() {
                 type="button"
                 className={buttonStyles.submitButton}
               >
-                Subir imagen
+                Subir una imagen
               </button>{" "}
               {formik.values.file && formik.values.file.name}
               <ErrorMessage component={TextError} name={"file"} />
             </div>
             <div className={globalStyles.center}>
-              <button className={buttonStyles.submitButton} type="submit">
+              <button
+                className={buttonStyles.submitButton}
+                type="submit"
+                disabled={isLoading}
+              >
                 Subir anuncio
               </button>
             </div>

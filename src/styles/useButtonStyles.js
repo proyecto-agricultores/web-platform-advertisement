@@ -23,6 +23,9 @@ const useButtonStyles = makeStyles((theme) => ({
     outline: "none",
     margin: "5px 0",
     fontSize: "15px",
+    "&:disabled": {
+      backgroundColor: theme.palette.primary.light,
+    },
   },
 }));
 

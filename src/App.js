@@ -18,9 +18,11 @@ let theme = createMuiTheme({
   palette: {
     primary: {
       main: "#09b44d",
+      light: "#d0f1dd",
     },
     secondary: {
       main: "#ffcc99",
+      light: "#ffcc99",
     },
   },
 });
@@ -33,8 +35,9 @@ function App() {
       <div className="App">
         <Switch>
           <Route exact path="/" component={Login} />
+          <Route path="/signUp" component={() => "signup"} />
           <ProtectedRoute path="/myAds" component={MyAds} />
-          <ProtectedRoute path="/ad" component={CreateAd} />
+          <ProtectedRoute path="/createAd" component={CreateAd} />
           <Route path="*" component={() => "NOT FOUND 404"} />
         </Switch>
       </div>

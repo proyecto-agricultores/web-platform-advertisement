@@ -10,7 +10,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import useButtonStyles from "../../styles/useButtonStyles";
 
 import "./Login.css";
@@ -105,7 +105,7 @@ function Login() {
         {validator.password && (
           <p className="validator-text">{validator.password}</p>
         )}
-        <Box m={3}>
+        <Box mt={3}>
           <Button
             classes={{
               root: classes.root,
@@ -118,6 +118,9 @@ function Login() {
             Ingresar
           </Button>
         </Box>
+        <Link to="/signUp" style={{ fontSize: "11px" }}>
+          Regístrate
+        </Link>
         {isLoading && <CircularProgress size={30} />}
         <Dialog
           open={alertIsOpen}

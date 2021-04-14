@@ -35,6 +35,8 @@ function CreateAd(props) {
   const [selectedDistrict, setSelectedDistrict] = useState(0);
   const [supplyOptions, setSupplyOptions] = useState([]);
   const [totalAudience, setTotalAudience] = useState(null);
+  const [audience, setAudience] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
 
   const buttonStyles = useButtonStyles();
@@ -52,7 +54,9 @@ function CreateAd(props) {
       })
       .catch((error) => {
         console.log(error);
-        history.push("/");
+        if (error.response?.status === 401) {
+          history.push("/");
+        }
       });
     return;
   }, [history]);
@@ -83,50 +87,54 @@ function CreateAd(props) {
 
   const formatDate = (date) => {
     const month = date.getMonth() + 1;
-    return `${date.getDate()}/${month}/${date
-      .getFullYear()
-      .toString()
-      .slice(-2)} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    const formattedDate = `${date.getFullYear()}-${month}-${date.getDate()}`;
+    return formattedDate;
   };
 
-  const defaultDate = () => "1/1/20 0:0:0";
-
   const onSumbit = (values) => {
-    console.log(values);
-    api
-      .calculateAudience({
+    setIsLoading(true);
+    const audience = {
+      ...(selectedDepartment && {
         departmentId: selectedDepartment,
+      }),
+      ...(selectedRegion && {
         regionId: selectedRegion,
+      }),
+      ...(selectedDistrict && {
         districtId: selectedDistrict,
-        forOrders: values.publicationTypeOption.includes("pedido")
-          ? true
-          : false,
-        forPublications: values.publicationTypeOption.includes("cultivo")
-          ? true
-          : false,
-        beginningSowingDate: values.sowingInitialDate
-          ? formatDate(values.sowingInitialDate)
-          : defaultDate(),
-        endingSowingDate: values.sowingFinalDate
-          ? formatDate(values.sowingFinalDate)
-          : defaultDate(),
-        beginningHarvestDate: values.harvestInitialDate
-          ? formatDate(values.harvestInitialDate)
-          : defaultDate(),
-        endingHarvestDate: values.harvestFinalDate
-          ? formatDate(values.harvestFinalDate)
-          : defaultDate(),
-        supplies: values.supplyOption.map((option) => {
-          console.log(option);
-          return parseInt(option, 10);
-        }),
-      })
+      }),
+      forOrders: values.publicationTypeOption.includes("pedido") ? true : false,
+      forPublications: values.publicationTypeOption.includes("cultivo")
+        ? true
+        : false,
+      ...(values.sowingInitialDate && {
+        beginningSowingDate: formatDate(values.sowingInitialDate),
+      }),
+      ...(values.sowingFinalDate && {
+        endingSowingDate: formatDate(values.sowingFinalDate),
+      }),
+      ...(values.harvestInitialDate && {
+        beginningHarvestDate: formatDate(values.harvestInitialDate),
+      }),
+      ...(values.harvestFinalDate && {
+        endingHarvestDate: formatDate(values.harvestFinalDate),
+      }),
+      supplies: values.supplyOption.map((option) => {
+        return parseInt(option, 10);
+      }),
+    };
+    api
+      .calculateAudience(audience)
       .then((response) => {
-        console.log(response);
+        setTotalAudience(response.data.total);
+        setAudience(audience);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        history.push("/");
+        if (error.response?.status === 401) {
+          history.push("/");
+        }
       });
   };
 
@@ -185,7 +193,11 @@ function CreateAd(props) {
                 />
                 <hr />
                 <div className={globalStyles.center}>
-                  <button className={buttonStyles.submitButton} type="submit">
+                  <button
+                    className={buttonStyles.submitButton}
+                    type="submit"
+                    disabled={isLoading}
+                  >
                     Generar audiencia para mi anuncio
                   </button>
                 </div>
@@ -194,7 +206,9 @@ function CreateAd(props) {
           </Formik>
           <h3>
             Audiencia total:{" "}
-            {totalAudience ? totalAudience : "No calculada aún."}
+            {totalAudience || totalAudience === 0
+              ? totalAudience
+              : "No calculada aún."}
           </h3>
           <h2 className={classes.steps}>Paso 2: Datos de su anuncio</h2>
           <AdInfoForm />
