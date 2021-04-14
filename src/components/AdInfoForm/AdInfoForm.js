@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import "./AdInfoForm.css";
 import FormikControl from "../Formik/FormikControl";
 import useButtonStyles from "../../styles/useButtonStyles";
 import useGlobalStyles from "../../styles/useGlobalStyles";
-import TextError from "../Formik/TextError";
+import File from "../Formik/File";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -27,7 +27,6 @@ function AdInfoForm() {
   const globalStyles = useGlobalStyles();
 
   const [isLoading, setIsLoading] = useState(false);
-  let fileRef = "";
 
   const initialValues = {
     name: "",
@@ -72,25 +71,7 @@ function AdInfoForm() {
             </div>
             <div className="ad-info-form-image">
               <h3 className={classes.title}>Imagen</h3>
-              <input
-                id="file"
-                name="file"
-                type="file"
-                onChange={(event) => {
-                  formik.setFieldValue("file", event.currentTarget.files[0]);
-                }}
-                className="image-control"
-                ref={(file) => (fileRef = file)}
-              />
-              <button
-                onClick={() => fileRef.click()}
-                type="button"
-                className={buttonStyles.submitButton}
-              >
-                Subir una imagen
-              </button>{" "}
-              {formik.values.file && formik.values.file.name}
-              <ErrorMessage component={TextError} name={"file"} />
+              <File formik={formik} text="Subir foto del anuncio" />
             </div>
             <div className={globalStyles.center}>
               <button

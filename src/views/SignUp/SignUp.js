@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Container, Grid, Snackbar, Typography } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
-import Textfield from "../../components/Formik/TextField";
-import Button from "../../components/Formik/Button";
 import MuiPhoneNumber from "material-ui-phone-number";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
 import LocationForm from "../../components/AdLocationDropdown/LocationForm";
+import Textfield from "../../components/Formik/TextField";
+import Button from "../../components/Formik/Button";
+import File from "../../components/Formik/File";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -68,9 +69,18 @@ const FORM_VALIDATION = Yup.object().shape(
     password: Yup.string().required("Campo requerido"),
     dni: dniOrRucValidation("dni"),
     ruc: dniOrRucValidation("ruc"),
+    file: Yup.mixed()
+      .required("Campo requerido")
+      .test(
+        "fileType",
+        "Archivo no soportado",
+        (value) => value && SUPPORTED_FORMATS.includes(value.type)
+      ),
   },
   ["dni", "ruc"]
 );
+
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
 
 const SignUp = () => {
   const classes = useStyles();
@@ -177,6 +187,9 @@ const SignUp = () => {
                             Seleccione su zona
                           </Alert>
                         </Snackbar>
+                      </Grid>
+                      <Grid item xs={12} container justify="center">
+                        <File formik={formik} text="Subir una foto de perfil" />
                       </Grid>
                       <Grid item xs={12} container justify="center">
                         <Button>CREAR USUARIO</Button>
