@@ -69,13 +69,11 @@ const FORM_VALIDATION = Yup.object().shape(
     password: Yup.string().required("Campo requerido"),
     dni: dniOrRucValidation("dni"),
     ruc: dniOrRucValidation("ruc"),
-    file: Yup.mixed()
-      .required("Campo requerido")
-      .test(
-        "fileType",
-        "Archivo no soportado",
-        (value) => value && SUPPORTED_FORMATS.includes(value.type)
-      ),
+    file: Yup.mixed().test(
+      "fileType",
+      "Archivo no soportado",
+      (value) => value && SUPPORTED_FORMATS.includes(value.type)
+    ),
   },
   ["dni", "ruc"]
 );
@@ -114,7 +112,7 @@ const SignUp = () => {
                 }}
                 validationSchema={FORM_VALIDATION}
                 onSubmit={(values) => {
-                  console.log("hola");
+                  console.log(values);
                   if (
                     selectedDepartment === "" ||
                     selectedDistrict === "" ||
@@ -123,7 +121,6 @@ const SignUp = () => {
                     setAlertIsOpen(true);
                     return;
                   }
-                  console.log(values);
                 }}
               >
                 {(formik) => (
@@ -144,6 +141,9 @@ const SignUp = () => {
                             defaultCountry={"pe"}
                             name="phoneNumber"
                             fullWidth={true}
+                            onChange={(e) =>
+                              formik.setFieldValue("phoneNumber", e)
+                            }
                           />
                         </Box>
                       </Grid>
