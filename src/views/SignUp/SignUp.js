@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Box, Button, Container, Grid, Typography } from "@material-ui/core";
+import { Box, Container, Grid, Snackbar, Typography } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 import Textfield from "../../components/Formik/TextField";
+import Button from "../../components/Formik/Button";
 import MuiPhoneNumber from "material-ui-phone-number";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import useButtonStyles from "../../styles/useButtonStyles";
+
+import LocationForm from "../../components/AdLocationDropdown/LocationForm";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,12 +40,6 @@ const INITIAL_FORM_STATE = {
   dni: "",
   ruc: "",
 };
-
-Yup.setLocale({
-  number: {
-    default: "Debe ingresar un número",
-  },
-});
 
 const dniOrRucValidation = (name) =>
   Yup.string().when(name === "dni" ? "ruc" : "dni", {
@@ -77,7 +78,12 @@ const FORM_VALIDATION = Yup.object().shape(
 
 const SignUp = () => {
   const classes = useStyles();
-  const buttonClasses = useButtonStyles();
+
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedRegion, setSelectedRegion] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+
+  const [alertIsOpen, setAlertIsOpen] = useState(false);
 
   return (
     <div className={classes.root}>
@@ -102,53 +108,89 @@ const SignUp = () => {
                 }}
                 validationSchema={FORM_VALIDATION}
                 onSubmit={(values) => {
+                  console.log("hola");
+                  if (
+                    selectedDepartment === "" ||
+                    selectedDistrict === "" ||
+                    selectedRegion === ""
+                  ) {
+                    setAlertIsOpen(true);
+                    return;
+                  }
                   console.log(values);
                 }}
               >
-                <Form>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                      <Typography>Tus datos</Typography>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <Textfield name="firstName" label="Nombres" />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <Textfield name="lastName" label="Apellidos" />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <Box mt={2}>
-                        <MuiPhoneNumber
-                          defaultCountry={"pe"}
-                          name="phoneNumber"
-                          fullWidth={true}
+                {(formik) => (
+                  <Form>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <Typography>Tus datos</Typography>
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <Textfield name="firstName" label="Nombres" />
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <Textfield name="lastName" label="Apellidos" />
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <Box mt={2}>
+                          <MuiPhoneNumber
+                            defaultCountry={"pe"}
+                            name="phoneNumber"
+                            fullWidth={true}
+                          />
+                        </Box>
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <Textfield
+                          name="password"
+                          type="password"
+                          label="Contraseña"
                         />
-                      </Box>
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <Textfield name="dni" label="DNI" type="number" />
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <Textfield name="ruc" label="RUC" type="number" />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <div className={classes.note}>
+                          Nota: debe ingresar su DNI y/o su RUC.
+                        </div>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <LocationForm
+                          selectedDepartment={selectedDepartment}
+                          setSelectedDepartment={setSelectedDepartment}
+                          selectedRegion={selectedRegion}
+                          setSelectedRegion={setSelectedRegion}
+                          selectedDistrict={selectedDistrict}
+                          setSelectedDistrict={setSelectedDistrict}
+                          isSignUp={true}
+                        />
+                        <Snackbar
+                          open={alertIsOpen}
+                          autoHideDuration={6000}
+                          onClose={() => setAlertIsOpen(false)}
+                        >
+                          <Alert
+                            onClose={() => setAlertIsOpen(false)}
+                            severity="error"
+                          >
+                            Seleccione su zona
+                          </Alert>
+                        </Snackbar>
+                      </Grid>
+                      <Grid item xs={12} container justify="center">
+                        {/* <Button>CREAR USUARIO</Button> */}
+                        <button type="submit" onClick={formik.handleSubmit}>
+                          CREAR
+                        </button>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={12} md={6}>
-                      <Textfield name="password" label="Contraseña" />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <Textfield name="dni" label="DNI" pattern="\d*" />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <Textfield name="ruc" label="RUC" />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <div className={classes.note}>
-                        Nota: debe ingresar su DNI y/o su RUC.
-                      </div>
-                    </Grid>
-                    <Grid item xs={12} container justify="center">
-                      <button
-                        className={buttonClasses.submitButton}
-                        type="submit"
-                      >
-                        CREAR USUARIO
-                      </button>
-                    </Grid>
-                  </Grid>
-                </Form>
+                  </Form>
+                )}
               </Formik>
             </div>
           </Container>

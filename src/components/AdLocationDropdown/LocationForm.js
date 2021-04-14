@@ -30,9 +30,13 @@ function LocationForm(props) {
   const classes = useStyles();
   const history = useHistory();
 
-  const [regionOptions, setRegionOptions] = useState(regionsInitialValue);
+  const [regionOptions, setRegionOptions] = useState(
+    props.isSignUp ? [] : regionsInitialValue
+  );
   const [regionsAreLoading, setRegionsAreLoading] = useState(false);
-  const [districtOptions, setDistrictOptions] = useState(districtsInitialValue);
+  const [districtOptions, setDistrictOptions] = useState(
+    props.isSignUp ? [] : districtsInitialValue
+  );
   const [districtsAreLoading, setDistrictsAreLoading] = useState(false);
 
   const generateDropdown = (
@@ -42,25 +46,32 @@ function LocationForm(props) {
     onChange,
     isLoading,
     value
-  ) => (
-    <>
-      <InputLabel id="demo-simple-select-label">{label}</InputLabel>
-      <Select
-        value={value}
-        name={name}
-        id={name}
-        onChange={onChange}
-        disabled={isLoading}
-        className={classes.dropdown}
-      >
-        {options.map((option) => (
-          <MenuItem key={option.key} value={option.value}>
-            {option.key}
-          </MenuItem>
-        ))}
-      </Select>
-    </>
-  );
+  ) => {
+    return (
+      <>
+        <InputLabel id="demo-simple-select-label">{label}</InputLabel>
+        <Select
+          value={value}
+          name={name}
+          id={name}
+          onChange={onChange}
+          disabled={
+            isLoading ||
+            (props.isSignUp &&
+              ((name === "regions" && props.selectedDepartment === "") ||
+                (name === "districts" && props.selectedRegion === "")))
+          }
+          className={classes.dropdown}
+        >
+          {options.map((option) => (
+            <MenuItem key={option.key} value={option.value}>
+              {option.key}
+            </MenuItem>
+          ))}
+        </Select>
+      </>
+    );
+  };
 
   const handleDepartmentChange = (e) => {
     const departmentId = e.target.value;
@@ -73,14 +84,18 @@ function LocationForm(props) {
           const { id: value, name: key } = region;
           return { key: key, value: value };
         });
-        newRegions.unshift(regionsInitialValue[0]);
-
-        props.setSelectedRegion(0);
-        setRegionOptions(newRegions);
-
-        props.setSelectedDistrict(0);
-        setDistrictOptions(districtsInitialValue);
-
+        if (!props.isSignUp) {
+          newRegions.unshift(regionsInitialValue[0]);
+          props.setSelectedRegion(0);
+          setRegionOptions(newRegions);
+          props.setSelectedDistrict(0);
+          setDistrictOptions(districtsInitialValue);
+        } else {
+          props.setSelectedRegion("");
+          props.setSelectedDistrict("");
+          setRegionOptions(newRegions);
+          setDistrictOptions([]);
+        }
         setRegionsAreLoading(false);
       })
       .catch((error) => {
@@ -102,9 +117,14 @@ function LocationForm(props) {
           const { id: value, name: key } = district;
           return { key: key, value: value };
         });
-        props.setSelectedDistrict(0);
-        newDistricts.unshift(districtsInitialValue[0]);
-        setDistrictOptions(newDistricts);
+        if (!props.isSignUp) {
+          props.setSelectedDistrict(0);
+          newDistricts.unshift(districtsInitialValue[0]);
+          setDistrictOptions(newDistricts);
+        } else {
+          props.setSelectedDistrict("");
+          setDistrictOptions(newDistricts);
+        }
         setDistrictsAreLoading(false);
       })
       .catch((error) => {
@@ -120,9 +140,13 @@ function LocationForm(props) {
     props.setSelectedDistrict(districtId);
   };
 
+  if (props.isSignUp && departmentOptions.length === 26) {
+    departmentOptions.shift();
+  }
+
   return (
     <div className="create-ad-form-location-container">
-      <h3 className={classes.title}>Zona</h3>
+      {!props.isSignUp && <h3 className={classes.title}>Zona</h3>}
       <ul className="create-ad-form-location-dropdowns">
         <li className="create-ad-form-location-dropdown">
           {generateDropdown(
@@ -158,5 +182,9 @@ function LocationForm(props) {
     </div>
   );
 }
+
+LocationForm.defaultProps = {
+  isSignUp: false,
+};
 
 export default LocationForm;

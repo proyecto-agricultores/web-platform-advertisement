@@ -3,11 +3,19 @@ import qs from "qs";
 
 const BASE_URL = "https://dev-cosecha-pr-43.herokuapp.com";
 
-axios.defaults.paramsSerializer = (params) => {
+const ApiWithToken = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+});
+
+ApiWithToken.defaults.paramsSerializer = (params) => {
   return qs.stringify(params, { indices: false }); // param=value1&param=value2
 };
 
-axios.interceptors.request.use(
+ApiWithToken.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("access_token");
     if (accessToken) {
@@ -20,7 +28,7 @@ axios.interceptors.request.use(
   }
 );
 
-axios.interceptors.response.use(
+ApiWithToken.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -44,13 +52,13 @@ axios.interceptors.response.use(
 
 const api = {
   hello: () => {
-    return axios.get(`${BASE_URL}/hello/`);
+    return ApiWithToken.get(`${BASE_URL}/hello/`);
   },
   token: (body) => {
     return axios.post(`${BASE_URL}/api/token/`, body);
   },
   supplies: () => {
-    return axios.get(`${BASE_URL}/supplys/`);
+    return ApiWithToken.get(`${BASE_URL}/supplys/`);
   },
   getRegionsByDepartmentId: (departmentId) => {
     if (departmentId !== 0) {
@@ -76,7 +84,7 @@ const api = {
     endingHarvestDate,
     supplies,
   }) => {
-    return axios.get(`${BASE_URL}/estimatePublic/`, {
+    return ApiWithToken.get(`${BASE_URL}/estimatePublic/`, {
       params: {
         department_id: departmentId,
         region_id: regionId,

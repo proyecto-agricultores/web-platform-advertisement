@@ -20,6 +20,7 @@ let theme = createMuiTheme({
     primary: {
       main: "#09b44d",
       light: "#d0f1dd",
+      contrastText: "#fff",
     },
     secondary: {
       main: "#ffcc99",
