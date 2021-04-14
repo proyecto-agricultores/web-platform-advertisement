@@ -92,7 +92,7 @@ const SignUp = () => {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={3} direction="column" alignItems="center">
+      <Grid container spacing={2} direction="column" alignItems="center">
         <Grid item xs={12}>
           <h1>Registro</h1>
         </Grid>
@@ -146,6 +146,10 @@ const SignUp = () => {
                               formik.setFieldValue("phoneNumber", e)
                             }
                           />
+                          <div className={classes.note}>
+                            Nota: debe ingresar un número real para poder crear
+                            su cuenta.
+                          </div>
                         </Box>
                       </Grid>
                       <Grid item xs={12} md={6}>
@@ -189,8 +193,17 @@ const SignUp = () => {
                           </Alert>
                         </Snackbar>
                       </Grid>
-                      <Grid item xs={12} container justify="center">
+                      <Grid
+                        item
+                        xs={12}
+                        container
+                        direction="column"
+                        alignItems="center"
+                      >
                         <File formik={formik} text="Subir una foto de perfil" />
+                        <div className={classes.note}>
+                          Nota: la foto es opcional.
+                        </div>
                       </Grid>
                       <Grid item xs={12} container justify="center">
                         <Button>CREAR USUARIO</Button>
