@@ -26,6 +26,7 @@ const useButtonStyles = makeStyles((theme) => ({
     "&:disabled": {
       backgroundColor: theme.palette.primary.light,
     },
+    padding: "5px",
   },
 }));
 

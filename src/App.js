@@ -10,6 +10,7 @@ import Login from "./views/Login/Login";
 import CreateAd from "./views/CreateAd/CreateAd";
 import ProtectedRoute from "./services/ProtectedRoute";
 import MyAds from "./views/MyAds/MyAds";
+import SignUp from "./views/SignUp/SignUp";
 
 let theme = createMuiTheme({
   typography: {
@@ -35,7 +36,7 @@ function App() {
       <div className="App">
         <Switch>
           <Route exact path="/" component={Login} />
-          <Route path="/signUp" component={() => "signup"} />
+          <Route path="/signUp" component={SignUp} />
           <ProtectedRoute path="/myAds" component={MyAds} />
           <ProtectedRoute path="/createAd" component={CreateAd} />
           <Route path="*" component={() => "NOT FOUND 404"} />

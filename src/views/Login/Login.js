@@ -78,7 +78,7 @@ function Login() {
       alignItems="center"
     >
       <form id="login-form-cosecha">
-        <h2>Anunciantes</h2>
+        <h1>Anunciantes</h1>
         <img
           src="logo-cosecha.png"
           alt="Logo"
@@ -105,7 +105,7 @@ function Login() {
         {validator.password && (
           <p className="validator-text">{validator.password}</p>
         )}
-        <Box mt={3}>
+        <Box mt={3} mb={1}>
           <Button
             classes={{
               root: classes.root,
@@ -118,7 +118,7 @@ function Login() {
             Ingresar
           </Button>
         </Box>
-        <Link to="/signUp" style={{ fontSize: "11px" }}>
+        <Link to="/signUp" style={{ fontSize: "11px", textDecoration: "none" }}>
           Regístrate
         </Link>
         {isLoading && <CircularProgress size={30} />}
