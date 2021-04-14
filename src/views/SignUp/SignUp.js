@@ -65,10 +65,6 @@ const FORM_VALIDATION = Yup.object().shape(
   {
     firstName: Yup.string().required("Campo requerido"),
     lastName: Yup.string().required("Campo requerido"),
-    phoneNumber: Yup.number()
-      .integer()
-      .typeError("Por favor, ingrese un número válido")
-      .required("Campo requerido"),
     password: Yup.string().required("Campo requerido"),
     dni: dniOrRucValidation("dni"),
     ruc: dniOrRucValidation("ruc"),
@@ -183,10 +179,13 @@ const SignUp = () => {
                         </Snackbar>
                       </Grid>
                       <Grid item xs={12} container justify="center">
-                        {/* <Button>CREAR USUARIO</Button> */}
-                        <button type="submit" onClick={formik.handleSubmit}>
+                        <Button>CREAR USUARIO</Button>
+                        {/* <button
+                          type="submit"
+                          onClick={() => formik.handleSubmit()}
+                        >
                           CREAR
-                        </button>
+                        </button> */}
                       </Grid>
                     </Grid>
                   </Form>
