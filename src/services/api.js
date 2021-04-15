@@ -98,15 +98,28 @@ const api = {
       },
     });
   },
-  createUser: ({ firstName, lastName, phoneNumber, dni, ruc, password }) => {
-    return axios.post(`${BASE_URL}/users/`, {
-      first_name: firstName,
-      last_name: lastName,
-      phone_number: phoneNumber,
-      dni: dni,
-      ruc: ruc,
-      password: password,
-    });
+  createUser: ({
+    firstName,
+    lastName,
+    phoneNumber,
+    dni,
+    ruc,
+    password,
+    district,
+    file,
+  }) => {
+    const formData = new FormData();
+    formData.append("first_name", firstName);
+    formData.append("last_name", lastName);
+    formData.append("phone_number", phoneNumber);
+    formData.append("DNI", dni);
+    formData.append("RUC", ruc);
+    formData.append("password", password);
+    formData.append("district_id", district);
+    if (file) {
+      formData.append("file", file, file.name);
+    }
+    return axios.post(`${BASE_URL}/postUserFromWeb/`, formData);
   },
   generateTwilioCode: () => {
     return ApiWithToken.get(`${BASE_URL}/phoneVerification/`);

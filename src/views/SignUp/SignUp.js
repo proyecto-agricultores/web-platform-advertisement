@@ -119,17 +119,24 @@ const SignUp = () => {
                     setAlertIsOpen(true);
                     return;
                   }
-                  // api.createUser({
-                  //   ...values
-
-                  // });
+                  api
+                    .createUser({
+                      ...values,
+                      district: selectedDistrict,
+                    })
+                    .then((response) => {
+                      console.log(response);
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                    });
                 }}
               >
                 {(formik) => (
                   <Form>
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
-                        <Typography>Tus datos</Typography>
+                        <Typography>Sus datos</Typography>
                       </Grid>
                       <Grid item xs={12} md={6}>
                         <Textfield name="firstName" label="Nombres" />

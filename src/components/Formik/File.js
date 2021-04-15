@@ -2,6 +2,7 @@ import React from "react";
 import TextError from "../Formik/TextError";
 import useButtonStyles from "../../styles/useButtonStyles";
 import { ErrorMessage } from "formik";
+import { Button } from "@material-ui/core";
 
 const File = (props) => {
   const buttonStyles = useButtonStyles();
@@ -19,13 +20,13 @@ const File = (props) => {
         className="image-control"
         ref={(file) => (fileRef = file)}
       />
-      <button
+      <Button
         onClick={() => fileRef.click()}
-        type="button"
-        className={buttonStyles.submitButton}
+        color="primary"
+        variant="contained"
       >
         {props.text}
-      </button>{" "}
+      </Button>{" "}
       {props.formik.values.file && props.formik.values.file.name}
       <ErrorMessage component={TextError} name={"file"} />
     </div>
