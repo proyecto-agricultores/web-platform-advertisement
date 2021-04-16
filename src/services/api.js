@@ -1,7 +1,7 @@
 import axios from "axios";
 import qs from "qs";
 
-const BASE_URL = "https://dev-cosecha-pr-43.herokuapp.com";
+const BASE_URL = "https://dev-cosecha-pr-45.herokuapp.com";
 
 const ApiWithToken = axios.create({
   headers: {
@@ -41,8 +41,10 @@ ApiWithToken.interceptors.response.use(
       });
       if (response.status === 200) {
         localStorage.setItem("access_token", response.data.access);
-        localStorage.removeItem("refresh_token");
         return axios(originalRequest);
+      } else {
+        localStorage.removeItem("refresh_token");
+        localStorage.removeItem("access_token");
       }
     }
     return Promise.reject(error);
@@ -58,6 +60,13 @@ const api = {
   },
   supplies: () => {
     return ApiWithToken.get(`${BASE_URL}/supplys/`);
+  },
+  purchaseCredits: (amount, sourceId, email) => {
+    return ApiWithToken.post(`${BASE_URL}/purchaseCredits/`, {
+      amount: amount,
+      source_id: sourceId,
+      email: email,
+    });
   },
   getRegionsByDepartmentId: (departmentId) => {
     if (departmentId !== 0) {
