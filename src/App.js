@@ -8,6 +8,7 @@ import { ThemeProvider } from "@material-ui/styles";
 
 import Login from "./views/Login/Login";
 import CreateAd from "./views/CreateAd/CreateAd";
+import BuyCredits from "./views/BuyCredits/BuyCredits";
 import ProtectedRoute from "./services/ProtectedRoute";
 import MyAds from "./views/MyAds/MyAds";
 import SignUp from "./views/SignUp/SignUp";
@@ -37,10 +38,11 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className="App">
         <Switch>
-          <Route exact path="/" component={Login} />
+          <ProtectedRoute exact path="/" component={MyAds} />
+          <Route path="/login" component={Login} />
           <Route path="/signUp" component={SignUp} />
-          <ProtectedRoute path="/myAds" component={MyAds} />
           <ProtectedRoute path="/createAd" component={CreateAd} />
+          <ProtectedRoute path="/buyCredits" component={BuyCredits} />
           {/* <ProtectedRoute
             path="/codeConfirmation"
             component={CodeConfirmation}

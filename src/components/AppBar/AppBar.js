@@ -32,9 +32,14 @@ const AppBar = () => {
           <Typography variant="h6" className={classes.title}>
             Cosecha - Anunciantes
           </Typography>
-          <Link to="/myAds" style={{ textDecoration: "none" }}>
+          <Link to="/" style={{ textDecoration: "none" }}>
             <Button color="default" className={classes.link}>
               Mis anuncios
+            </Button>
+          </Link>
+          <Link to="/buyCredits" style={{ textDecoration: "none" }}>
+            <Button color="default" className={classes.link}>
+              Comprar créditos
             </Button>
           </Link>
           <Link to="/createAd" style={{ textDecoration: "none" }}>
