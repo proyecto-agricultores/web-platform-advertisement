@@ -64,6 +64,9 @@ const api = {
   getCredits: () => {
     return ApiWithToken.get(`${BASE_URL}/myCredits/`);
   },
+  getAds: () => {
+    return ApiWithToken.get(`${BASE_URL}/myAd/`);
+  },
   purchaseCredits: (amount, sourceId, email) => {
     return ApiWithToken.post(`${BASE_URL}/purchaseCredits/`, {
       amount: amount,
