@@ -61,6 +61,9 @@ const api = {
   supplies: () => {
     return ApiWithToken.get(`${BASE_URL}/supplys/`);
   },
+  getCredits: () => {
+    return ApiWithToken.get(`${BASE_URL}/myCredits/`);
+  },
   purchaseCredits: (amount, sourceId, email) => {
     return ApiWithToken.post(`${BASE_URL}/purchaseCredits/`, {
       amount: amount,

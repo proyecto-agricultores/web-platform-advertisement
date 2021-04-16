@@ -38,9 +38,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className="App">
         <Switch>
-          <Route exact path="/" component={Login} />
+          <ProtectedRoute exact path="/" component={MyAds} />
+          <Route path="/login" component={Login} />
           <Route path="/signUp" component={SignUp} />
-          <ProtectedRoute path="/myAds" component={MyAds} />
           <ProtectedRoute path="/createAd" component={CreateAd} />
           <ProtectedRoute path="/buyCredits" component={BuyCredits} />
           {/* <ProtectedRoute
