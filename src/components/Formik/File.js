@@ -1,11 +1,9 @@
 import React from "react";
 import TextError from "../Formik/TextError";
-import useButtonStyles from "../../styles/useButtonStyles";
 import { ErrorMessage } from "formik";
 import { Button } from "@material-ui/core";
 
 const File = (props) => {
-  const buttonStyles = useButtonStyles();
   let fileRef = "";
 
   return (

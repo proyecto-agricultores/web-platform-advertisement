@@ -211,7 +211,7 @@ function CreateAd(props) {
               : "No calculada aún."}
           </h3>
           <h2 className={classes.steps}>Paso 2: Datos de su anuncio</h2>
-          <AdInfoForm />
+          <AdInfoForm audience={audience} />
           <h2 className={classes.steps}>Paso 3: Comprar créditos</h2>
         </div>
       </div>

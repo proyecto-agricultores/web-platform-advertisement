@@ -11,6 +11,7 @@ import Button from "../../components/Formik/Button";
 import File from "../../components/Formik/File";
 import Snackbar from "../../components/Utils/Snackbar/Snackbar";
 import api from "../../services/api";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -80,6 +81,7 @@ const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
 
 const SignUp = () => {
   const classes = useStyles();
+  const history = useHistory();
 
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("");
@@ -126,6 +128,7 @@ const SignUp = () => {
                     })
                     .then((response) => {
                       console.log(response);
+                      history.replace("/codeConfirmation");
                     })
                     .catch((error) => {
                       console.error(error);
@@ -150,9 +153,9 @@ const SignUp = () => {
                             defaultCountry={"pe"}
                             name="phoneNumber"
                             fullWidth={true}
-                            onChange={(e) =>
-                              formik.setFieldValue("phoneNumber", e)
-                            }
+                            onChange={(e) => {
+                              formik.setFieldValue("phoneNumber", e);
+                            }}
                           />
                           <div className={classes.note}>
                             Nota: debe ingresar un número real para poder crear

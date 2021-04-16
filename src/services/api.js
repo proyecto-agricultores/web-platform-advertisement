@@ -119,6 +119,9 @@ const api = {
     if (file) {
       formData.append("file", file, file.name);
     }
+    // return axios.post(`${BASE_URL}/postUserFromWeb/`, formData, {
+    //   headers: { "Access-Control-Allow-Origin": "*" },
+    // });
     return axios.post(`${BASE_URL}/postUserFromWeb/`, formData);
   },
   generateTwilioCode: () => {
@@ -126,6 +129,9 @@ const api = {
   },
   sendTwilioCode: (code) => {
     return ApiWithToken.post(`${BASE_URL}/phoneVerification/`, { code: code });
+  },
+  postAd: () => {
+    return ApiWithToken.post(`${BASE_URL}/postAd/`);
   },
 };
 
