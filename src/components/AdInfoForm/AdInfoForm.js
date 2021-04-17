@@ -60,11 +60,8 @@ function AdInfoForm(props) {
 
   const onSubmit = (values) => {
     setIsLoading(true);
-    // console.log("Form data", values);
-    // console.log("audience", props.audience);
-    // console.log(parseDate(props.audience.beginningSowingDate));
     const adData = {
-      remainingCredits: 5,
+      remainingCredits: 10000000,
       departmentId: props.audience.departmentId || 0,
       regionId: props.audience.regionId || 0,
       districtId: props.audience.districtId || 0,
@@ -79,16 +76,16 @@ function AdInfoForm(props) {
       supplies: props.audience.supplies,
       file: values.file,
     };
-    // console.log(adData);
     api
       .postAd(adData)
       .then((response) => {
         console.log(response);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error(error);
+        setIsLoading(false);
       });
-    setIsLoading(false);
   };
 
   return (
