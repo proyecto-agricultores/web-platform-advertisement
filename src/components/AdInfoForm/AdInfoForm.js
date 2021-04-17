@@ -39,6 +39,7 @@ function AdInfoForm(props) {
     name: "",
     url: "",
     file: null,
+    credits: "",
   };
 
   const validationSchema = Yup.object({
@@ -51,6 +52,7 @@ function AdInfoForm(props) {
         "Archivo no soportado",
         (value) => value && SUPPORTED_FORMATS.includes(value.type)
       ),
+    credits: Yup.number().required("Campo requerido"),
   });
 
   const parseDate = (date) => {
@@ -67,7 +69,7 @@ function AdInfoForm(props) {
   const onSubmit = (values) => {
     setIsLoading(true);
     const adData = {
-      remainingCredits: 10000000,
+      remainingCredits: values.credits,
       departmentId: props.audience.departmentId || 0,
       regionId: props.audience.regionId || 0,
       districtId: props.audience.districtId || 0,
@@ -123,6 +125,10 @@ function AdInfoForm(props) {
             <div className="ad-info-form-image">
               <h3 className={classes.title}>Imagen</h3>
               <File formik={formik} text="Subir foto del anuncio" />
+            </div>
+            <div className="ad-info-form-credits">
+              <h3 className={classes.title}>Créditos</h3>
+              <FormikControl control="input" type="number" name="credits" />
             </div>
             <div className={globalStyles.center}>
               <button
