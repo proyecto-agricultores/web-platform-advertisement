@@ -9,7 +9,7 @@ import api from "../../services/api";
 import departmentOptions from "../../data/departments.json";
 import "./LocationForm.css";
 
-const regionsInitialValue = [{ key: "Todas los regiones", value: 0 }];
+const regionsInitialValue = [{ key: "Todas las regiones", value: 0 }];
 const districtsInitialValue = [{ key: "Todos los distritos", value: 0 }];
 
 const useStyles = makeStyles((theme) => ({
@@ -76,63 +76,75 @@ function LocationForm(props) {
   const handleDepartmentChange = (e) => {
     const departmentId = e.target.value;
     props.setSelectedDepartment(departmentId);
-    setRegionsAreLoading(true);
-    api
-      .getRegionsByDepartmentId(departmentId)
-      .then((response) => {
-        const newRegions = response.data.map((region) => {
-          const { id: value, name: key } = region;
-          return { key: key, value: value };
+    if (departmentId !== 0) {
+      setRegionsAreLoading(true);
+      api
+        .getRegionsByDepartmentId(departmentId)
+        .then((response) => {
+          const newRegions = response.data.map((region) => {
+            const { id: value, name: key } = region;
+            return { key: key, value: value };
+          });
+          if (!props.isSignUp) {
+            newRegions.unshift(regionsInitialValue[0]);
+            props.setSelectedRegion(0);
+            setRegionOptions(newRegions);
+            props.setSelectedDistrict(0);
+            setDistrictOptions(districtsInitialValue);
+          } else {
+            props.setSelectedRegion("");
+            props.setSelectedDistrict("");
+            setRegionOptions(newRegions);
+            setDistrictOptions([]);
+          }
+          setRegionsAreLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.response?.status === 401) {
+            history.push("/");
+          }
         });
-        if (!props.isSignUp) {
-          newRegions.unshift(regionsInitialValue[0]);
-          props.setSelectedRegion(0);
-          setRegionOptions(newRegions);
-          props.setSelectedDistrict(0);
-          setDistrictOptions(districtsInitialValue);
-        } else {
-          props.setSelectedRegion("");
-          props.setSelectedDistrict("");
-          setRegionOptions(newRegions);
-          setDistrictOptions([]);
-        }
-        setRegionsAreLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        if (error.response?.status === 401) {
-          history.push("/");
-        }
-      });
+    } else {
+      props.setSelectedRegion(0);
+      props.setSelectedDistrict(0);
+      setRegionOptions(regionsInitialValue);
+      setDistrictOptions(districtsInitialValue);
+    }
   };
 
   const handleRegionChange = (e) => {
     const regionId = e.target.value;
     props.setSelectedRegion(regionId);
-    setDistrictsAreLoading(true);
-    api
-      .getDistrictsByRegionId(regionId)
-      .then((response) => {
-        const newDistricts = response.data.map((district) => {
-          const { id: value, name: key } = district;
-          return { key: key, value: value };
+    if (regionId !== 0) {
+      setDistrictsAreLoading(true);
+      api
+        .getDistrictsByRegionId(regionId)
+        .then((response) => {
+          const newDistricts = response.data.map((district) => {
+            const { id: value, name: key } = district;
+            return { key: key, value: value };
+          });
+          if (!props.isSignUp) {
+            props.setSelectedDistrict(0);
+            newDistricts.unshift(districtsInitialValue[0]);
+            setDistrictOptions(newDistricts);
+          } else {
+            props.setSelectedDistrict("");
+            setDistrictOptions(newDistricts);
+          }
+          setDistrictsAreLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.response?.status === 401) {
+            history.push("/");
+          }
         });
-        if (!props.isSignUp) {
-          props.setSelectedDistrict(0);
-          newDistricts.unshift(districtsInitialValue[0]);
-          setDistrictOptions(newDistricts);
-        } else {
-          props.setSelectedDistrict("");
-          setDistrictOptions(newDistricts);
-        }
-        setDistrictsAreLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        if (error.response?.status === 401) {
-          history.push("/");
-        }
-      });
+    } else {
+      props.setSelectedDistrict(0);
+      setDistrictOptions(districtsInitialValue);
+    }
   };
 
   const handleDistrictChange = (e) => {

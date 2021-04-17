@@ -8,6 +8,8 @@ import FormikControl from "../Formik/FormikControl";
 import useButtonStyles from "../../styles/useButtonStyles";
 import useGlobalStyles from "../../styles/useGlobalStyles";
 import File from "../Formik/File";
+import api from "../../services/api";
+import Snackbar from "../Utils/Snackbar/Snackbar";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -27,11 +29,17 @@ function AdInfoForm(props) {
   const globalStyles = useGlobalStyles();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [alertState, setAlertState] = useState({
+    isOpen: false,
+    text: "",
+    severity: "error",
+  });
 
   const initialValues = {
     name: "",
     url: "",
     file: null,
+    credits: "",
   };
 
   const validationSchema = Yup.object({
@@ -44,13 +52,57 @@ function AdInfoForm(props) {
         "Archivo no soportado",
         (value) => value && SUPPORTED_FORMATS.includes(value.type)
       ),
+    credits: Yup.number().required("Campo requerido"),
   });
+
+  const parseDate = (date) => {
+    if (date) {
+      const formattedDate = new Date(date);
+      return `${formattedDate.getDate()}/${
+        formattedDate.getMonth() + 1
+      }/${formattedDate.getFullYear().toString().slice(-2)} 0:0:0`;
+    } else {
+      return "1/1/20 0:0:0";
+    }
+  };
 
   const onSubmit = (values) => {
     setIsLoading(true);
-    console.log("Form data", values);
-    console.log("audience", props.audience);
-    setIsLoading(false);
+    const adData = {
+      remainingCredits: values.credits,
+      departmentId: props.audience.departmentId || 0,
+      regionId: props.audience.regionId || 0,
+      districtId: props.audience.districtId || 0,
+      forOrders: props.audience.forOrders ? "True" : "False",
+      forPublications: props.audience.forPublications ? "True" : "False",
+      url: values.url,
+      name: values.name,
+      beginningSowingDate: parseDate(props.audience.beginningSowingDate),
+      endingSowingDate: parseDate(props.audience.endingSowingDate),
+      beginningHarvestDate: parseDate(props.audience.beginningHarvestDate),
+      endingHarvestDate: parseDate(props.audience.endingHarvestDate),
+      supplies: props.audience.supplies,
+      file: values.file,
+    };
+    api
+      .postAd(adData)
+      .then(() => {
+        setAlertState({
+          isOpen: true,
+          text: "Anuncio creado",
+          severity: "success",
+        });
+      })
+      .catch((error) => {
+        setAlertState({
+          isOpen: true,
+          text: error.response.data.message || "Error al crear el anuncio",
+          severity: "error",
+        });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -74,6 +126,10 @@ function AdInfoForm(props) {
               <h3 className={classes.title}>Imagen</h3>
               <File formik={formik} text="Subir foto del anuncio" />
             </div>
+            <div className="ad-info-form-credits">
+              <h3 className={classes.title}>Créditos</h3>
+              <FormikControl control="input" type="number" name="credits" />
+            </div>
             <div className={globalStyles.center}>
               <button
                 className={buttonStyles.submitButton}
@@ -86,6 +142,12 @@ function AdInfoForm(props) {
           </Form>
         )}
       </Formik>
+      <Snackbar
+        alertIsOpen={alertState.isOpen}
+        setAlertIsOpen={() => setAlertState({ ...alertState, isOpen: false })}
+        text={alertState.text}
+        severity={alertState.severity}
+      />
     </div>
   );
 }

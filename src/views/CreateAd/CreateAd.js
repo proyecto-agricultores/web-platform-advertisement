@@ -8,7 +8,7 @@ import departmentOptions from "../../data/departments.json";
 import LocationForm from "../../components/AdLocationDropdown/LocationForm";
 import api from "../../services/api";
 import AppBar from "../../components/AppBar/AppBar";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Typography } from "@material-ui/core";
 import { useHistory } from "react-router";
 import AdInfoForm from "../../components/AdInfoForm/AdInfoForm";
 import useButtonStyles from "../../styles/useButtonStyles";
@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
   mainDiv: {
     width: "100%",
+  },
+  note: {
+    ...theme.typography.caption,
   },
 }));
 
@@ -174,6 +177,11 @@ function CreateAd(props) {
             selectedDistrict={selectedDistrict}
             setSelectedDistrict={setSelectedDistrict}
           />
+          <Typography className={classes.note}>
+            Nota: Cuando se selecciona un departamento, "Todas las regiones"
+            filtra a todas las regiones del departamento seleccionado. "Todos
+            los distritos" funciona de la misma forma.
+          </Typography>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -211,8 +219,11 @@ function CreateAd(props) {
               : "No calculada aún."}
           </h3>
           <h2 className={classes.steps}>Paso 2: Datos de su anuncio</h2>
-          <AdInfoForm audience={audience} />
-          <h2 className={classes.steps}>Paso 3: Comprar créditos</h2>
+          {audience ? (
+            <AdInfoForm audience={audience} />
+          ) : (
+            "Calcule la audiencia antes de subir los datos de su anuncio."
+          )}
         </div>
       </div>
     </>

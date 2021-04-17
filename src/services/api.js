@@ -29,19 +29,26 @@ ApiWithToken.interceptors.request.use(
 
 ApiWithToken.interceptors.response.use(
   (response) => {
+    response.headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true",
+      "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+      "Access-Control-Allow-Headers":
+        "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+    };
     return response;
   },
   async (error) => {
     const originalRequest = error.config;
     let refreshToken = localStorage.getItem("refresh_token");
     refreshToken = refreshToken === "null" ? null : refreshToken;
-    if (refreshToken && error.response.status === 401) {
+    if (refreshToken && error.response?.status === 401) {
       const response = await axios.post(`${BASE_URL}/api/token/refresh/`, {
         refresh: refreshToken,
       });
       if (response.status === 200) {
         localStorage.setItem("access_token", response.data.access);
-        return axios(originalRequest);
+        return ApiWithToken(originalRequest);
       } else {
         localStorage.removeItem("refresh_token");
         localStorage.removeItem("access_token");
@@ -148,8 +155,45 @@ const api = {
   sendTwilioCode: (code) => {
     return ApiWithToken.post(`${BASE_URL}/phoneVerification/`, { code: code });
   },
-  postAd: () => {
-    return ApiWithToken.post(`${BASE_URL}/postAd/`);
+  postAd: ({
+    remainingCredits,
+    departmentId,
+    regionId,
+    districtId,
+    forOrders,
+    forPublications,
+    url,
+    name,
+    beginningSowingDate,
+    endingSowingDate,
+    beginningHarvestDate,
+    endingHarvestDate,
+    supplies,
+    file,
+  }) => {
+    const formData = new FormData();
+    formData.append("remaining_credits", remainingCredits);
+    formData.append("department_id", departmentId);
+    formData.append("region_id", regionId);
+    formData.append("district_id", districtId);
+    formData.append("for_orders", forOrders);
+    formData.append("for_publications", forPublications);
+    formData.append("picture_url", "");
+    formData.append("url", url);
+    formData.append("name", name);
+    formData.append("beginning_sowing_date", beginningSowingDate);
+    formData.append("ending_sowing_date", endingSowingDate);
+    formData.append("beginning_harvest_date", beginningHarvestDate);
+    formData.append("ending_harvest_date", endingHarvestDate);
+    for (let i = 0; i < supplies.length; ++i) {
+      formData.append("supplies[]", supplies[i]);
+    }
+    formData.append("file", file, file.name);
+    return ApiWithToken.post(`${BASE_URL}/postAd/`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   },
 };
 
