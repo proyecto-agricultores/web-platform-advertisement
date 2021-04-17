@@ -28,8 +28,8 @@ function MyAds() {
             Usted cuenta con <b>{credit}</b> créditos en su cuenta. Recurde que
             primero deberá contar con saldo antes de publicar un anuncio. Para
             adquirir dichos créditos, podrá hacerlo{" "}
-            <Link to="/buyCredits">
-              <LinkMui>aquí.</LinkMui>
+            <Link id="buyCreditsLink" to="/buyCredits">
+              aquí.
             </Link>
           </Box>
         ) : (

@@ -88,6 +88,12 @@ const SignUp = () => {
   const [selectedDistrict, setSelectedDistrict] = useState("");
 
   const [alertIsOpen, setAlertIsOpen] = useState(false);
+  const [alertText, setAlertText] = useState("");
+
+  const setAlert = (text) => {
+    setAlertIsOpen(true);
+    setAlertText(text);
+  };
 
   return (
     <div className={classes.root}>
@@ -118,7 +124,7 @@ const SignUp = () => {
                     selectedDistrict === "" ||
                     selectedRegion === ""
                   ) {
-                    setAlertIsOpen(true);
+                    setAlert("Seleccionar su departamento, región o distrito.");
                     return;
                   }
                   api
@@ -126,12 +132,20 @@ const SignUp = () => {
                       ...values,
                       district: selectedDistrict,
                     })
-                    .then((response) => {
+                    .then(async (response) => {
+                      let tokenResponse = await api.token({
+                        phone_number: values.phoneNumber,
+                        password: values.password,
+                      });
+                      let { access, refresh } = tokenResponse.data;
+                      localStorage.setItem("access_token", access);
+                      localStorage.setItem("refresh_token", refresh);
                       console.log(response);
                       history.replace("/codeConfirmation");
                     })
                     .catch((error) => {
                       console.error(error);
+                      setAlert("Error al crear el usuario.");
                     });
                 }}
               >
@@ -194,7 +208,7 @@ const SignUp = () => {
                         <Snackbar
                           alertIsOpen={alertIsOpen}
                           setAlertIsOpen={setAlertIsOpen}
-                          text="Elija su zona"
+                          text={alertText}
                           severity="error"
                         />
                       </Grid>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ReactCodeInput from "react-code-input";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid } from "@material-ui/core";
+import { Grid, Link } from "@material-ui/core";
 import api from "../../services/api";
 import Snackbar from "../../components/Utils/Snackbar/Snackbar";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CodeConfirmation = () => {
+  const history = useHistory();
   const classes = useStyles();
   const [alertIsOpen, setAlertIsOpen] = useState(false);
   const [alertProps, setAlertProps] = useState({
@@ -31,14 +33,25 @@ const CodeConfirmation = () => {
     if (e.length === 4) {
       api
         .sendTwilioCode(e)
-        .then(() => {
-          setAlertProps({ text: "Cuenta verificada", severity: "success" });
-          setAlertIsOpen(true);
+        .then((response) => {
+          console.log(response.data);
+          if (response.data == "pending") {
+            setAlertProps({
+              text: "El código es incorrecto. Intente nuevamente.",
+              severity: "warning",
+            });
+            setAlertIsOpen(true);
+          } else {
+            setAlertProps({ text: "Cuenta verificada", severity: "success" });
+            setAlertIsOpen(true);
+            history.replace("/");
+          }
         })
         .catch((error) => {
           console.error(error);
           setAlertProps({
-            text: "El código es incorrecto. Intente nuevamente",
+            text:
+              "Existe un problema con nuestro servidor. Refresque la página e intente nuevamente en unos momentos.",
             severity: "error",
           });
           setAlertIsOpen(true);
@@ -57,7 +70,8 @@ const CodeConfirmation = () => {
       >
         <Grid item xs={12}>
           <h1>Confirmación de código</h1>
-          Revise los mensajes de su teléfono.
+          Usted acaba de recibir un mensaje SMS. Ingrese el código recibido a
+          continuación.
         </Grid>
         <Grid item xs={12}>
           <img
@@ -67,14 +81,24 @@ const CodeConfirmation = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <ReactCodeInput type="number" fields={4} onChange={handleChange} />
-          <Snackbar
-            alertIsOpen={alertIsOpen}
-            setAlertIsOpen={setAlertIsOpen}
-            text={alertProps.text}
-            severity={alertProps.severity}
-          />
+          <ReactCodeInput fields={4} onChange={handleChange} />
         </Grid>
+        <Grid item xs={12}>
+          <Link
+            onClick={() => {
+              api.generateTwilioCode();
+            }}
+          >
+            Reenviar el código.
+          </Link>
+        </Grid>
+
+        <Snackbar
+          alertIsOpen={alertIsOpen}
+          setAlertIsOpen={setAlertIsOpen}
+          text={alertProps.text}
+          severity={alertProps.severity}
+        />
       </Grid>
     </div>
   );
