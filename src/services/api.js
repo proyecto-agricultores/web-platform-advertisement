@@ -42,7 +42,9 @@ ApiWithToken.interceptors.response.use(
     const originalRequest = error.config;
     let refreshToken = localStorage.getItem("refresh_token");
     refreshToken = refreshToken === "null" ? null : refreshToken;
-    if (refreshToken && error.response?.status === 401) {
+    if (refreshToken && error.response?.data?.code === "user_not_found") {
+      return Promise.reject(error);
+    } else if (refreshToken && error.response?.status === 401) {
       const response = await axios.post(`${BASE_URL}/api/token/refresh/`, {
         refresh: refreshToken,
       });
@@ -179,7 +181,7 @@ const api = {
     formData.append("for_orders", forOrders);
     formData.append("for_publications", forPublications);
     formData.append("picture_url", "");
-    formData.append("url", url);
+    formData.append("URL", url);
     formData.append("name", name);
     formData.append("beginning_sowing_date", beginningSowingDate);
     formData.append("ending_sowing_date", endingSowingDate);

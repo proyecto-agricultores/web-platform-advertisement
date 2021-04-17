@@ -1,10 +1,4 @@
-import {
-  Box,
-  Container,
-  Grid,
-  Link as LinkMui,
-  Typography,
-} from "@material-ui/core";
+import { Box, Container, Grid, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import AppBar from "../../components/AppBar/AppBar";
 import api from "../../services/api";
@@ -16,7 +10,7 @@ function MyAds() {
   const [credit, setCredits] = useState();
   const [ads, setAds] = useState();
 
-  useEffect(async () => {
+  const getCredits = async () => {
     api
       .getCredits()
       .then((result) => {
@@ -25,6 +19,9 @@ function MyAds() {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const getAds = async () => {
     api
       .getAds()
       .then((result) => {
@@ -34,6 +31,11 @@ function MyAds() {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  useEffect(() => {
+    getCredits();
+    getAds();
   }, []);
 
   return (
@@ -73,9 +75,11 @@ function MyAds() {
                   name={elem.name}
                   for_orders={elem.for_orders}
                   for_publications={elem.for_publications}
-                  region={elem.region?.name || "n/a"}
-                  department={elem.department?.name || "n/a"}
-                  district={elem.district?.name || "n/a"}
+                  region={elem.region?.name || "Todas las regiones."}
+                  department={
+                    elem.department?.name || "Todos los departamentos."
+                  }
+                  district={elem.district?.name || "Todos los distritos."}
                   remaining_credits={elem.remaining_credits}
                   picture_URL={elem.picture_URL}
                   URL={elem.URL}

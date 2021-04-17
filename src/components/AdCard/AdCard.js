@@ -14,11 +14,11 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import Chip from "@material-ui/core/Chip";
 import DoneIcon from "@material-ui/icons/Done";
-import Grid from "@material-ui/core/Grid";
 import { Box } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import api from "../../services/api";
 import Snackbar from "../../components/Utils/Snackbar/Snackbar";
+import AlertDialog from "../../components/AlertDialog/AlertDialog";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,6 +50,7 @@ function AdCard(props) {
   const [alertText, setAlertText] = useState("");
   const [alertSeverity, setAlertSeverity] = useState("error");
   const [showCard, setShowCard] = React.useState(true);
+  const [alertDialogOpen, setAlertDialogOpen] = useState(false);
 
   const setAlert = (text, severity) => {
     setAlertIsOpen(true);
@@ -59,6 +60,17 @@ function AdCard(props) {
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const parseDate = (date) => {
+    if (date) {
+      const formattedDate = new Date(date);
+      return `${formattedDate.getDate()}-${
+        formattedDate.getMonth() + 1
+      }-${formattedDate.getFullYear()}`;
+    } else {
+      return "No especificada.";
+    }
   };
 
   return (
@@ -77,14 +89,18 @@ function AdCard(props) {
             </Typography>
             {props.for_orders && (
               <Box m={1}>
-                <Chip label="Ordenes" color="gray" deleteIcon={<DoneIcon />} />
+                <Chip
+                  label="Ordenes"
+                  color="secondary"
+                  deleteIcon={<DoneIcon />}
+                />
               </Box>
             )}
             {props.for_publications && (
               <Box m={1}>
                 <Chip
                   label="Publicaciones"
-                  color="gray"
+                  color="secondary"
                   deleteIcon={<DoneIcon />}
                 />
               </Box>
@@ -100,22 +116,7 @@ function AdCard(props) {
             </IconButton>
             <IconButton
               aria-label="eliminar anuncio"
-              onClick={() => {
-                api
-                  .deleteAd(props.id)
-                  .then((res) => {
-                    setShowCard(false);
-                    console.log(res);
-                  })
-                  .catch((error) => {
-                    setAlert(
-                      `Hubo un error. El anuncio no se eliminó.`,
-                      "error"
-                    );
-                    console.log(error);
-                  });
-                console.log("Hello");
-              }}
+              onClick={() => setAlertDialogOpen(true)}
             >
               <DeleteIcon />
             </IconButton>
@@ -134,14 +135,19 @@ function AdCard(props) {
             <CardContent>
               <Typography variant="h5">Geolocalización</Typography>
               <Typography paragraph>
-                {props.department}, {props.region}, {props.district}
+                Departamento: {props.department} <br />
+                Región: {props.region} <br />
+                Distrito: {props.district}
               </Typography>
+
               <Typography variant="h5">Fechas</Typography>
               <Typography paragraph>
-                beginning_sowing_date: {props.beginning_sowing_date} <br />
-                ending_sowing_date: {props.ending_sowing_date} <br />
-                beginning_harvest_date: {props.beginning_harvest_date} <br />
-                ending_harvest_date: {props.ending_harvest_date}
+                <b>Inicio Siembra</b>: {parseDate(props.beginning_sowing_date)}{" "}
+                <br />
+                <b>Fin Siembra</b>: {parseDate(props.ending_sowing_date)} <br />
+                <b>Inicio Cosecha</b>: {parseDate(props.beginning_harvest_date)}{" "}
+                <br />
+                <b>Fin Cosecha</b>: {parseDate(props.ending_harvest_date)}
               </Typography>
               <Typography variant="h5">Código de Anuncio</Typography>
               <Typography paragraph>id: {props.id}</Typography>
@@ -154,6 +160,27 @@ function AdCard(props) {
           text={alertText}
           severity={alertSeverity}
         />
+        <AlertDialog
+          title="¿Estás seguro que deseas eliminar el anuncio?"
+          description="Esta acción es irreversible."
+          open={alertDialogOpen}
+          handleCancel={() => setAlertDialogOpen(false)}
+          handleSuccess={() => {
+            api
+              .deleteAd(props.id)
+              .then((res) => {
+                setShowCard(false);
+                console.log(res);
+              })
+              .catch((error) => {
+                setAlert(`Hubo un error. El anuncio no se eliminó.`, "error");
+                console.log(error);
+              })
+              .finally(() => setAlertDialogOpen(false));
+          }}
+          cancelMessage="Cancelar"
+          successMessage="Eliminar"
+        ></AlertDialog>
       </div>
     )
   );

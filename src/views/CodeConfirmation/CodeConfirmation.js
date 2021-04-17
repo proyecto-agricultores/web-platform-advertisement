@@ -35,7 +35,7 @@ const CodeConfirmation = () => {
         .sendTwilioCode(e)
         .then((response) => {
           console.log(response.data);
-          if (response.data == "pending") {
+          if (response.data === "pending") {
             setAlertProps({
               text: "El código es incorrecto. Intente nuevamente.",
               severity: "warning",
