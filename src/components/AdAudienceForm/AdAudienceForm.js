@@ -140,6 +140,7 @@ function AdAudienceForm(props) {
           Limpiar fechas
         </button>
       </div>
+      Nota: este campo es opcional.
     </div>
   );
 }

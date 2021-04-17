@@ -8,6 +8,7 @@ import FormikControl from "../Formik/FormikControl";
 import useButtonStyles from "../../styles/useButtonStyles";
 import useGlobalStyles from "../../styles/useGlobalStyles";
 import File from "../Formik/File";
+import api from "../../services/api";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -46,10 +47,47 @@ function AdInfoForm(props) {
       ),
   });
 
+  const parseDate = (date) => {
+    if (date) {
+      const formattedDate = new Date(date);
+      return `${formattedDate.getDate()}/${
+        formattedDate.getMonth() + 1
+      }/${formattedDate.getFullYear().toString().slice(-2)} 0:0:0`;
+    } else {
+      return "1/1/20 0:0:0";
+    }
+  };
+
   const onSubmit = (values) => {
     setIsLoading(true);
-    console.log("Form data", values);
-    console.log("audience", props.audience);
+    // console.log("Form data", values);
+    // console.log("audience", props.audience);
+    // console.log(parseDate(props.audience.beginningSowingDate));
+    const adData = {
+      remainingCredits: 5,
+      departmentId: props.audience.departmentId || 0,
+      regionId: props.audience.regionId || 0,
+      districtId: props.audience.districtId || 0,
+      forOrders: props.audience.forOrders ? "True" : "False",
+      forPublications: props.audience.forPublications ? "True" : "False",
+      url: values.url,
+      name: values.name,
+      beginningSowingDate: parseDate(props.audience.beginningSowingDate),
+      endingSowingDate: parseDate(props.audience.endingSowingDate),
+      beginningHarvestDate: parseDate(props.audience.beginningHarvestDate),
+      endingHarvestDate: parseDate(props.audience.endingHarvestDate),
+      supplies: props.audience.supplies,
+      file: values.file,
+    };
+    // console.log(adData);
+    api
+      .postAd(adData)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     setIsLoading(false);
   };
 

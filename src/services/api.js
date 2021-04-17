@@ -35,7 +35,7 @@ ApiWithToken.interceptors.response.use(
     const originalRequest = error.config;
     let refreshToken = localStorage.getItem("refresh_token");
     refreshToken = refreshToken === "null" ? null : refreshToken;
-    if (refreshToken && error.response.status === 401) {
+    if (refreshToken && error.response?.status === 401) {
       const response = await axios.post(`${BASE_URL}/api/token/refresh/`, {
         refresh: refreshToken,
       });
@@ -142,8 +142,43 @@ const api = {
   sendTwilioCode: (code) => {
     return ApiWithToken.post(`${BASE_URL}/phoneVerification/`, { code: code });
   },
-  postAd: () => {
-    return ApiWithToken.post(`${BASE_URL}/postAd/`);
+  postAd: ({
+    remainingCredits,
+    departmentId,
+    regionId,
+    districtId,
+    forOrders,
+    forPublications,
+    url,
+    name,
+    beginningSowingDate,
+    endingSowingDate,
+    beginningHarvestDate,
+    endingHarvestDate,
+    supplies,
+    file,
+  }) => {
+    const formData = new FormData();
+    formData.append("remaining_credits", remainingCredits);
+    formData.append("department_id", departmentId);
+    formData.append("region_id", regionId);
+    formData.append("district_id", districtId);
+    formData.append("for_orders", forOrders);
+    formData.append("for_publications", forPublications);
+    formData.append("picture_url", "");
+    formData.append("url", url);
+    formData.append("name", name);
+    formData.append("beginning_sowing_date", beginningSowingDate);
+    formData.append("ending_sowing_date", endingSowingDate);
+    formData.append("beginning_harvest_date", beginningHarvestDate);
+    formData.append("ending_harvest_date", endingHarvestDate);
+    formData.append("supplies", supplies);
+    formData.append("file", file, file.name);
+    return ApiWithToken.post(`${BASE_URL}/postAd/`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   },
 };
 
