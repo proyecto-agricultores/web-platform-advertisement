@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
 
-function AdInfoForm() {
+function AdInfoForm(props) {
   const classes = useStyles();
   const buttonStyles = useButtonStyles();
   const globalStyles = useGlobalStyles();
@@ -49,6 +49,7 @@ function AdInfoForm() {
   const onSubmit = (values) => {
     setIsLoading(true);
     console.log("Form data", values);
+    console.log("audience", props.audience);
     setIsLoading(false);
   };
 
