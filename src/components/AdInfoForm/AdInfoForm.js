@@ -9,6 +9,7 @@ import useButtonStyles from "../../styles/useButtonStyles";
 import useGlobalStyles from "../../styles/useGlobalStyles";
 import File from "../Formik/File";
 import api from "../../services/api";
+import Snackbar from "../Utils/Snackbar/Snackbar";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -28,6 +29,11 @@ function AdInfoForm(props) {
   const globalStyles = useGlobalStyles();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [alertState, setAlertState] = useState({
+    isOpen: false,
+    text: "",
+    severity: "error",
+  });
 
   const initialValues = {
     name: "",
@@ -78,12 +84,21 @@ function AdInfoForm(props) {
     };
     api
       .postAd(adData)
-      .then((response) => {
-        console.log(response);
-        setIsLoading(false);
+      .then(() => {
+        setAlertState({
+          isOpen: true,
+          text: "Anuncio creado",
+          severity: "success",
+        });
       })
       .catch((error) => {
-        console.error(error);
+        setAlertState({
+          isOpen: true,
+          text: error.response.data.message || "Error al crear el anuncio",
+          severity: "error",
+        });
+      })
+      .finally(() => {
         setIsLoading(false);
       });
   };
@@ -121,6 +136,12 @@ function AdInfoForm(props) {
           </Form>
         )}
       </Formik>
+      <Snackbar
+        alertIsOpen={alertState.isOpen}
+        setAlertIsOpen={() => setAlertState({ ...alertState, isOpen: false })}
+        text={alertState.text}
+        severity={alertState.severity}
+      />
     </div>
   );
 }
