@@ -48,7 +48,7 @@ ApiWithToken.interceptors.response.use(
       });
       if (response.status === 200) {
         localStorage.setItem("access_token", response.data.access);
-        return axios(originalRequest);
+        return ApiWithToken(originalRequest);
       } else {
         localStorage.removeItem("refresh_token");
         localStorage.removeItem("access_token");
@@ -179,7 +179,9 @@ const api = {
     formData.append("ending_sowing_date", endingSowingDate);
     formData.append("beginning_harvest_date", beginningHarvestDate);
     formData.append("ending_harvest_date", endingHarvestDate);
-    formData.append("supplies", supplies);
+    for (let i = 0; i < supplies.length; ++i) {
+      formData.append("supplies[]", supplies[i]);
+    }
     formData.append("file", file, file.name);
     return ApiWithToken.post(`${BASE_URL}/postAd/`, formData, {
       headers: {

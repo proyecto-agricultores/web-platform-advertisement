@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Typography } from "@material-ui/core";
 import React from "react";
 import FormikControl from "../Formik/FormikControl";
 
@@ -48,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
   separator: {
     width: "1px",
     backgroundColor: "black",
+  },
+  note: {
+    ...theme.typography.caption,
   },
 }));
 
@@ -140,7 +143,9 @@ function AdAudienceForm(props) {
           Limpiar fechas
         </button>
       </div>
-      Nota: este campo es opcional.
+      <Typography className={classes.note}>
+        Nota: este campo es opcional.
+      </Typography>
     </div>
   );
 }

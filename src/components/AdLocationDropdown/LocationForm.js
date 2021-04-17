@@ -9,7 +9,7 @@ import api from "../../services/api";
 import departmentOptions from "../../data/departments.json";
 import "./LocationForm.css";
 
-const regionsInitialValue = [{ key: "Todas los regiones", value: 0 }];
+const regionsInitialValue = [{ key: "Todas las regiones", value: 0 }];
 const districtsInitialValue = [{ key: "Todos los distritos", value: 0 }];
 
 const useStyles = makeStyles((theme) => ({
