@@ -8,12 +8,8 @@
 }
 
 .create-ad-form-location-dropdown {
-  width: 250px;
+  width: 230px;
   margin: 10px 0px;
-}
-
-.create-ad-form-location-dropdown select {
-  width: 100%;
 }
 
 .create-ad-form-location-container {

@@ -10,7 +10,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import useButtonStyles from "../../styles/useButtonStyles";
 
 import "./Login.css";
@@ -28,6 +28,7 @@ function Login() {
   });
   const [alertIsOpen, setAlertIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [alertText, setAlertText] = useState("");
 
   const classes = useButtonStyles();
 
@@ -62,11 +63,19 @@ function Login() {
       let { access, refresh } = response.data;
       localStorage.setItem("access_token", access);
       localStorage.setItem("refresh_token", refresh);
-      setIsLoading(false);
-      history.push("/myAds");
+      const myInfo = await api.myInfo();
+      const { role } = myInfo.data[0];
+      if (role !== "an") {
+        setAlertText("Su usuario no tiene el rol de anunciante.");
+        setAlertIsOpen(true);
+      } else {
+        history.push("/");
+      }
     } catch (error) {
-      setIsLoading(false);
+      setAlertText("El usuario o la contraseña son incorrectos.");
       setAlertIsOpen(true);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -78,7 +87,7 @@ function Login() {
       alignItems="center"
     >
       <form id="login-form-cosecha">
-        <h2>Anunciantes</h2>
+        <h1>Anunciantes</h1>
         <img
           src="logo-cosecha.png"
           alt="Logo"
@@ -105,7 +114,7 @@ function Login() {
         {validator.password && (
           <p className="validator-text">{validator.password}</p>
         )}
-        <Box m={3}>
+        <Box mt={3} mb={1}>
           <Button
             classes={{
               root: classes.root,
@@ -118,6 +127,9 @@ function Login() {
             Ingresar
           </Button>
         </Box>
+        <Link to="/signUp" style={{ fontSize: "11px", textDecoration: "none" }}>
+          Regístrate
+        </Link>
         {isLoading && <CircularProgress size={30} />}
         <Dialog
           open={alertIsOpen}
@@ -130,7 +142,7 @@ function Login() {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              El usuario o la contraseña son incorrectos.
+              {alertText}
             </DialogContentText>
           </DialogContent>
           <DialogActions>

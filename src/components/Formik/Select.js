@@ -6,7 +6,9 @@ function Select(props) {
   const { label, name, options, ...rest } = props;
   return (
     <div className="form-control">
-      <label htmlFor={name}>{label}</label>
+      <label className="ad-labels" htmlFor={name}>
+        {label}
+      </label>
       <FastField as="select" id={name} name={name} {...rest}>
         {options.map((option) => {
           return (

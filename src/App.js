@@ -8,8 +8,11 @@ import { ThemeProvider } from "@material-ui/styles";
 
 import Login from "./views/Login/Login";
 import CreateAd from "./views/CreateAd/CreateAd";
+import BuyCredits from "./views/BuyCredits/BuyCredits";
 import ProtectedRoute from "./services/ProtectedRoute";
 import MyAds from "./views/MyAds/MyAds";
+import SignUp from "./views/SignUp/SignUp";
+import CodeConfirmation from "./views/CodeConfirmation/CodeConfirmation";
 
 let theme = createMuiTheme({
   typography: {
@@ -17,10 +20,13 @@ let theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: "#09B44D",
+      main: "#09b44d",
+      light: "#d0f1dd",
+      contrastText: "#fff",
     },
     secondary: {
-      main: "#D0F1DD",
+      main: "#808588",
+      light: "#ffcc99",
     },
   },
 });
@@ -32,9 +38,16 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className="App">
         <Switch>
-          <Route exact path="/" component={Login} />
-          <ProtectedRoute path="/myAds" component={MyAds} />
-          <ProtectedRoute path="/ad" component={CreateAd} />
+          <ProtectedRoute exact path="/" component={MyAds} />
+          <Route path="/login" component={Login} />
+          <Route path="/signUp" component={SignUp} />
+          <ProtectedRoute path="/createAd" component={CreateAd} />
+          <ProtectedRoute path="/buyCredits" component={BuyCredits} />
+          {/* <ProtectedRoute
+            path="/codeConfirmation"
+            component={CodeConfirmation}
+          /> */}
+          <Route path="/codeConfirmation" component={CodeConfirmation} />
           <Route path="*" component={() => "NOT FOUND 404"} />
         </Switch>
       </div>

@@ -1,0 +1,13 @@
+.ad-info-form-container {
+  width: 100%;
+}
+
+.form-control > input {
+  font-family: "Poppins";
+  width: 100%;
+}
+
+.image-control {
+  font-family: "Poppins";
+  display: none;
+}
