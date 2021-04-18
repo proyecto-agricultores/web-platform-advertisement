@@ -188,7 +188,7 @@ const api = {
     formData.append("beginning_harvest_date", beginningHarvestDate);
     formData.append("ending_harvest_date", endingHarvestDate);
     for (let i = 0; i < supplies.length; ++i) {
-      formData.append("supplies[]", supplies[i]);
+      formData.append("supplies", supplies[i]);
     }
     formData.append("file", file, file.name);
     return ApiWithToken.post(`${BASE_URL}/postAd/`, formData, {

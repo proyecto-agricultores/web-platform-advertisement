@@ -44,9 +44,9 @@ function MyAds() {
       <Container maxWidth="md">
         {credit !== undefined ? (
           <Box mt={2}>
-            Usted cuenta con <b>{credit}</b> créditos en su cuenta. Recurde que
-            primero deberá contar con saldo antes de publicar un anuncio. Para
-            adquirir dichos créditos, podrá hacerlo{" "}
+            Usted cuenta con <b>{credit}</b> créditos libres en su cuenta.
+            Recuerde que primero deberá contar con saldo antes de publicar un
+            anuncio. Para adquirir dichos créditos, podrá hacerlo{" "}
             <Link id="buyCreditsLink" to="/buyCredits">
               aquí.
             </Link>
