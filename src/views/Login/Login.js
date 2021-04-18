@@ -63,14 +63,14 @@ function Login() {
       let { access, refresh } = response.data;
       localStorage.setItem("access_token", access);
       localStorage.setItem("refresh_token", refresh);
-      const myInfo = await api.myInfo();
-      const { role } = myInfo.data[0];
-      if (role !== "an") {
-        setAlertText("Su usuario no tiene el rol de anunciante.");
-        setAlertIsOpen(true);
-      } else {
-        history.push("/");
-      }
+      // const myInfo = await api.myInfo();
+      // const { role } = myInfo.data[0];
+      // if (role !== "an") {
+      //   setAlertText("Su usuario no tiene el rol de anunciante.");
+      //   setAlertIsOpen(true);
+      // } else {
+      history.push("/");
+      // }
     } catch (error) {
       setAlertText("El usuario o la contraseña son incorrectos.");
       setAlertIsOpen(true);
