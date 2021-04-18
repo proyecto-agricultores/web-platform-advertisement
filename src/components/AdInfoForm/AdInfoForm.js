@@ -108,8 +108,6 @@ function AdInfoForm(props) {
         } else {
           history.replace("/login");
         }
-      })
-      .finally(() => {
         setIsLoading(false);
       });
   };
