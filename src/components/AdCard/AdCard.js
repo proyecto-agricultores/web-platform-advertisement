@@ -71,6 +71,7 @@ function AdCard(props) {
   const [showCard, setShowCard] = React.useState(true);
   const [alertDialogOpen, setAlertDialogOpen] = useState(false);
   const [recargaDialogOpen, setRecargaDialogOpen] = useState(false);
+  const [supplies, setSupplies] = useState([]);
 
   const setAlert = (text, severity) => {
     setAlertIsOpen(true);
@@ -80,6 +81,17 @@ function AdCard(props) {
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+    if (!expanded) {
+      api
+        .getAdSupplies(props.id)
+        .then((response) => {
+          console.log(response.data.supplies);
+          setSupplies(response.data.supplies);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   const parseDate = (date) => {
@@ -178,6 +190,19 @@ function AdCard(props) {
                 Su anuncio cuenta con un total de {props.remaining_credits}{" "}
                 créditos restantes de los {props.original_credits} comprados
                 inicialmente.
+              </Typography>
+
+              <Typography variant="h5">Insumos</Typography>
+              <Typography color="textSecondary" paragraph>
+                {supplies !== null ? (
+                  <ul>
+                    {supplies.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div>Hello</div>
+                )}
               </Typography>
 
               <Typography variant="h5">Geolocalización</Typography>

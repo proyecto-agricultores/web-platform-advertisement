@@ -7,12 +7,14 @@ import Button from "../../components/Formik/Button";
 import * as Yup from "yup";
 import api from "../../services/api";
 import Snackbar from "../../components/Utils/Snackbar/Snackbar";
+import { useHistory } from "react-router";
 
 function RechargeCredits(props) {
+  const history = useHistory();
+
   const [alertIsOpen, setAlertIsOpen] = useState(false);
   const [alertText, setAlertText] = useState("");
   const [alertSeverity, setAlertSeverity] = useState("error");
-  const [isLoading, setIsLoading] = useState(false);
 
   const setAlert = (text, severity) => {
     setAlertIsOpen(true);
@@ -34,8 +36,9 @@ function RechargeCredits(props) {
                 console.log("Hey");
                 api
                   .rechargeAdCredits(props.addId, values.credits)
-                  .then((response) => {
+                  .then(() => {
                     setAlert("Créditos recargados correctamente.", "success");
+                    history.go(0);
                   })
                   .catch((error) => {
                     console.log(error);
