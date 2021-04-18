@@ -10,6 +10,7 @@ import useGlobalStyles from "../../styles/useGlobalStyles";
 import File from "../Formik/File";
 import api from "../../services/api";
 import Snackbar from "../Utils/Snackbar/Snackbar";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -27,6 +28,7 @@ function AdInfoForm(props) {
   const classes = useStyles();
   const buttonStyles = useButtonStyles();
   const globalStyles = useGlobalStyles();
+  const history = useHistory();
 
   const [isLoading, setIsLoading] = useState(false);
   const [alertState, setAlertState] = useState({
@@ -92,6 +94,9 @@ function AdInfoForm(props) {
           text: "Anuncio creado",
           severity: "success",
         });
+        setTimeout(() => {
+          history.replace("/");
+        }, 2000);
       })
       .catch((error) => {
         setAlertState({
