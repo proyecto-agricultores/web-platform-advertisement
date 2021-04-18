@@ -95,15 +95,19 @@ function AdInfoForm(props) {
           severity: "success",
         });
         setTimeout(() => {
-          history.replace("/");
+          history.replace("/login");
         }, 2000);
       })
       .catch((error) => {
-        setAlertState({
-          isOpen: true,
-          text: error.response.data.message || "Error al crear el anuncio",
-          severity: "error",
-        });
+        if (error.response?.status !== 401) {
+          setAlertState({
+            isOpen: true,
+            text: error.response.data.message || "Error al crear el anuncio",
+            severity: "error",
+          });
+        } else {
+          history.replace("/login");
+        }
       })
       .finally(() => {
         setIsLoading(false);

@@ -44,7 +44,7 @@ const CodeConfirmation = () => {
           } else {
             setAlertProps({ text: "Cuenta verificada", severity: "success" });
             setAlertIsOpen(true);
-            history.replace("/");
+            history.replace("/login");
           }
         })
         .catch((error) => {

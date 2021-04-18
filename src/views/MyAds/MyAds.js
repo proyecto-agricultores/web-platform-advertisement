@@ -5,38 +5,46 @@ import api from "../../services/api";
 import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import AdCard from "../../components/AdCard/AdCard";
+import { useHistory } from "react-router";
 
 function MyAds() {
   const [credit, setCredits] = useState();
   const [ads, setAds] = useState();
-
-  const getCredits = async () => {
-    api
-      .getCredits()
-      .then((result) => {
-        setCredits(result.data.creditos);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const getAds = async () => {
-    api
-      .getAds()
-      .then((result) => {
-        setAds(result.data);
-        console.log(result.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  const history = useHistory();
 
   useEffect(() => {
+    const getCredits = async () => {
+      api
+        .getCredits()
+        .then((result) => {
+          setCredits(result.data.creditos);
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response?.status === 401) {
+            history.replace("/login");
+          }
+        });
+    };
+
+    const getAds = async () => {
+      api
+        .getAds()
+        .then((result) => {
+          setAds(result.data);
+          console.log(result.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response?.status === 401) {
+            history.replace("/login");
+          }
+        });
+    };
+
     getCredits();
     getAds();
-  }, []);
+  }, [history]);
 
   return (
     <>
