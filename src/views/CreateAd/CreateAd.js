@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import Skeleton from "react-loading-skeleton";
+import { Box } from "@material-ui/core";
 
 import "./CreateAd.css";
 import AdAudienceForm from "../../components/AdAudienceForm/AdAudienceForm";
@@ -40,12 +42,26 @@ function CreateAd(props) {
   const [totalAudience, setTotalAudience] = useState(null);
   const [audience, setAudience] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [credit, setCredits] = useState();
   const history = useHistory();
 
   const buttonStyles = useButtonStyles();
   const globalStyles = useGlobalStyles();
 
   useEffect(() => {
+    const getCredits = async () => {
+      api
+        .getCredits()
+        .then((result) => {
+          setCredits(result.data.creditos);
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response?.status === 401) {
+            history.replace("/login");
+          }
+        });
+    };
     api
       .supplies()
       .then((response) => {
@@ -64,6 +80,7 @@ function CreateAd(props) {
       .finally(() => {
         setLoadingSupplies(false);
       });
+    getCredits();
     return;
   }, [history]);
 
@@ -171,6 +188,15 @@ function CreateAd(props) {
       <AppBar />
       <div className="create-ad-form-container">
         <div className="create-ad-form">
+          {credit !== undefined ? (
+            <Box mt={3}>
+              Usted cuenta con <b>{credit}</b> créditos libres en su cuenta.
+            </Box>
+          ) : (
+            <Box mt={3}>
+              <Skeleton count={1} />
+            </Box>
+          )}
           <h2 className={classes.steps}>Paso 1: Calcular audiencia</h2>
           <LocationForm
             selectedDepartment={selectedDepartment}
