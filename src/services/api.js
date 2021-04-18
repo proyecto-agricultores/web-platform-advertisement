@@ -79,6 +79,11 @@ const api = {
   deleteAd: (id) => {
     return ApiWithToken.delete(`${BASE_URL}/deleteAd/${id}/`);
   },
+  rechargeAdCredits: (id, credits) => {
+    return ApiWithToken.put(`${BASE_URL}/addCredits/${id}/`, {
+      credits: credits,
+    });
+  },
   purchaseCredits: (amount, sourceId, email) => {
     return ApiWithToken.post(`${BASE_URL}/purchaseCredits/`, {
       amount: amount,

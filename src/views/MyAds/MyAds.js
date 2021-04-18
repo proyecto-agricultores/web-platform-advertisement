@@ -60,6 +60,7 @@ function MyAds() {
       <Box m={4} />
       <Container maxWidth="md">
         <Typography variant="h4">Mis Anuncios</Typography>
+        <Box m={2} />
         {ads !== undefined ? (
           <Grid
             container
@@ -81,6 +82,7 @@ function MyAds() {
                   }
                   district={elem.district?.name || "Todos los distritos."}
                   remaining_credits={elem.remaining_credits}
+                  original_credits={elem.original_credits}
                   picture_URL={elem.picture_URL}
                   URL={elem.URL}
                   beginning_sowing_date={elem.beginning_sowing_date}
