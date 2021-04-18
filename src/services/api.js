@@ -154,9 +154,6 @@ const api = {
     if (file) {
       formData.append("file", file, file.name);
     }
-    // return axios.post(`${BASE_URL}/postUserFromWeb/`, formData, {
-    //   headers: { "Access-Control-Allow-Origin": "*" },
-    // });
     return axios.post(`${BASE_URL}/postUserFromWeb/`, formData);
   },
   generateTwilioCode: () => {
@@ -204,6 +201,9 @@ const api = {
         "Content-Type": "multipart/form-data",
       },
     });
+  },
+  myInfo: () => {
+    return ApiWithToken.get(`${BASE_URL}/myInfo/`);
   },
 };
 

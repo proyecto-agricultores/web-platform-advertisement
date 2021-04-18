@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 function CreateAd(props) {
   const classes = useStyles();
-  // const [loadingSupplies, setLoadingSupplies] = useState(true);
+  const [loadingSupplies, setLoadingSupplies] = useState(true);
   const [selectedDepartment, setSelectedDepartment] = useState(0);
   const [selectedRegion, setSelectedRegion] = useState(0);
   const [selectedDistrict, setSelectedDistrict] = useState(0);
@@ -58,8 +58,11 @@ function CreateAd(props) {
       .catch((error) => {
         console.log(error);
         if (error.response?.status === 401) {
-          history.push("/");
+          history.replace("/login");
         }
+      })
+      .finally(() => {
+        setLoadingSupplies(false);
       });
     return;
   }, [history]);
@@ -136,7 +139,7 @@ function CreateAd(props) {
       .catch((error) => {
         console.log(error);
         if (error.response?.status === 401) {
-          history.push("/");
+          history.replace("/login");
         }
       });
   };
@@ -198,6 +201,7 @@ function CreateAd(props) {
                   selectAllSupplies={selectAllSupplies}
                   deselectAllSupplies={deselectAllSupplies}
                   resetDates={resetDates}
+                  loadingSupplies={loadingSupplies}
                 />
                 <hr />
                 <div className={globalStyles.center}>
