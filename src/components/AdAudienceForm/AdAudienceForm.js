@@ -1,6 +1,7 @@
 import { makeStyles, Typography } from "@material-ui/core";
 import React from "react";
 import FormikControl from "../Formik/FormikControl";
+import Skeleton from "react-loading-skeleton";
 
 import "./AdAudienceForm.css";
 
@@ -70,12 +71,17 @@ function AdAudienceForm(props) {
         options={props.publicationTypeOptions}
       />
       <h3 className={classes.title}>Insumo</h3>
-      <FormikControl
-        control="checkbox"
-        label="Seleccione los insumos en los que desea que aparezca su publicación"
-        name="supplyOption"
-        options={props.supplyOptions}
-      />
+      {!props.loadingSupplies ? (
+        <FormikControl
+          control="checkbox"
+          label="Seleccione los insumos en los que desea que aparezca su publicación"
+          name="supplyOption"
+          options={props.supplyOptions}
+        />
+      ) : (
+        <Skeleton variant="rect" height={100} />
+      )}
+
       <div className={classes.flexButtons}>
         <button
           type="button"
