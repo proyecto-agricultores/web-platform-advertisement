@@ -85,7 +85,6 @@ function AdCard(props) {
       api
         .getAdSupplies(props.id)
         .then((response) => {
-          console.log(response.data.supplies);
           setSupplies(response.data.supplies);
         })
         .catch((error) => {
@@ -193,18 +192,15 @@ function AdCard(props) {
               </Typography>
 
               <Typography variant="h5">Insumos</Typography>
-              <Typography color="textSecondary" paragraph>
-                {supplies !== null ? (
-                  <ul>
-                    {supplies.map((item) => (
+              {supplies !== null && (
+                <ul>
+                  {supplies.map((item) => (
+                    <Typography color="textSecondary" key={item}>
                       <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div>Hello</div>
-                )}
-              </Typography>
-
+                    </Typography>
+                  ))}
+                </ul>
+              )}
               <Typography variant="h5">Geolocalización</Typography>
               <Typography color="textSecondary" paragraph>
                 Departamento: {props.department} <br />
@@ -244,7 +240,6 @@ function AdCard(props) {
               .deleteAd(props.id)
               .then((res) => {
                 setShowCard(false);
-                console.log(res);
               })
               .catch((error) => {
                 setAlert(`Hubo un error. El anuncio no se eliminó.`, "error");

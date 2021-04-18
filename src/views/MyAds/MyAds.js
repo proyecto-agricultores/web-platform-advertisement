@@ -32,7 +32,6 @@ function MyAds() {
         .getAds()
         .then((result) => {
           setAds(result.data);
-          console.log(result.data);
         })
         .catch((err) => {
           console.log(err);
