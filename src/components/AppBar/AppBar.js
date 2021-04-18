@@ -71,7 +71,10 @@ const AppBar = () => {
 
     setResponsiveness();
 
-    window.addEventListener("resize", () => setResponsiveness());
+    const handleResposiveness = () => setResponsiveness();
+
+    window.addEventListener("resize", handleResposiveness);
+    return () => window.removeEventListener("resize", handleResposiveness);
   }, []);
 
   const getDrawerChoices = () => {
