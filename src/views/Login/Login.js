@@ -28,6 +28,7 @@ function Login() {
   });
   const [alertIsOpen, setAlertIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [alertText, setAlertText] = useState("");
 
   const classes = useButtonStyles();
 
@@ -62,11 +63,19 @@ function Login() {
       let { access, refresh } = response.data;
       localStorage.setItem("access_token", access);
       localStorage.setItem("refresh_token", refresh);
-      setIsLoading(false);
-      history.push("/");
+      const myInfo = await api.myInfo();
+      const { role } = myInfo.data[0];
+      if (role !== "an") {
+        setAlertText("Su usuario no tiene el rol de anunciante.");
+        setAlertIsOpen(true);
+      } else {
+        history.push("/");
+      }
     } catch (error) {
-      setIsLoading(false);
+      setAlertText("El usuario o la contraseña son incorrectos.");
       setAlertIsOpen(true);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -133,7 +142,7 @@ function Login() {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              El usuario o la contraseña son incorrectos.
+              {alertText}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
