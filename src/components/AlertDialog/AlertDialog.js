@@ -20,14 +20,17 @@ const AlertDialog = (props) => {
           <DialogContentText id="alert-dialog-description">
             {props.description}
           </DialogContentText>
+          {props.content}
         </DialogContent>
         <DialogActions>
           <Button onClick={props.handleCancel} color="primary">
             {props.cancelMessage}
           </Button>
-          <Button onClick={props.handleSuccess} color="primary" autoFocus>
-            {props.successMessage}
-          </Button>
+          {props.successMessage && (
+            <Button onClick={props.handleSuccess} color="primary" autoFocus>
+              {props.successMessage}
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </div>
