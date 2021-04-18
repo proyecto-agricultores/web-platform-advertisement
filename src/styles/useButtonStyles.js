@@ -27,6 +27,9 @@ const useButtonStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.primary.light,
     },
     padding: "5px",
+    "&:hover": {
+      cursor: "pointer",
+    },
   },
 }));
 

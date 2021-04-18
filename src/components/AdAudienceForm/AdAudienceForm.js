@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "20px",
     outline: "none",
     margin: "5px 0",
+    "&:hover": {
+      cursor: "pointer",
+    },
   },
   flexButtons: {
     display: "flex",
