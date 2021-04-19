@@ -1,7 +1,7 @@
 import axios from "axios";
 import qs from "qs";
 
-const BASE_URL = "https://dev-cosecha-pr-45.herokuapp.com";
+const BASE_URL = "https://cosecha-api.herokuapp.com";
 
 const ApiWithToken = axios.create({
   headers: {
