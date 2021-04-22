@@ -45,19 +45,20 @@ const dniOrRucValidation = (name) =>
   Yup.string().when(name === "dni" ? "ruc" : "dni", {
     is: (value) => value === undefined,
     then: Yup.string()
-      .test(
-        "len",
-        `Debe tener ${name === "dni" ? "8" : "10"} dígitos`,
-        (val) => val?.length === (name === "dni" ? 8 : 10)
+      .matches(/[0-9]+/gi, "Solo ingresar números.")
+      .length(
+        name === "dni" ? 8 : 11,
+        `Debe tener ${name === "dni" ? "8" : "11"} dígitos.`
       )
-      .required("Debe ingresar un DNI o un RUC"),
+      .required("Campo requerido"),
     otherwise: Yup.string().when(name, {
       is: (value) => value !== undefined,
-      then: Yup.string().test(
-        "len",
-        `Debe tener ${name === "dni" ? "8" : "10"} dígitos`,
-        (val) => val?.length === (name === "dni" ? 8 : 10)
-      ),
+      then: Yup.string()
+        .matches(/[0-9]+/gi, "Solo ingresar números.")
+        .length(
+          name === "dni" ? 8 : 11,
+          `Debe tener ${name === "dni" ? "8" : "11"} dígitos.`
+        ),
     }),
   });
 
@@ -144,8 +145,16 @@ const SignUp = () => {
                       history.replace("/codeConfirmation");
                     })
                     .catch((error) => {
-                      console.error(error);
-                      setAlert("Error al crear el usuario.");
+                      if (
+                        error.response?.data.message ===
+                        "Teléfono ya registrado"
+                      ) {
+                        setAlert(
+                          "El teléfono que acaba de ingresar tiene una cuenta con nosotros. Prueba iniciando sesión en nuestra plataforma."
+                        );
+                      } else {
+                        setAlert("Error al crear el usuario.");
+                      }
                     });
                 }}
               >
@@ -185,10 +194,10 @@ const SignUp = () => {
                         />
                       </Grid>
                       <Grid item xs={12} md={6}>
-                        <Textfield name="dni" label="DNI" type="number" />
+                        <Textfield name="dni" label="DNI" />
                       </Grid>
                       <Grid item xs={12} md={6}>
-                        <Textfield name="ruc" label="RUC" type="number" />
+                        <Textfield name="ruc" label="RUC" />
                       </Grid>
                       <Grid item xs={12}>
                         <div className={classes.note}>

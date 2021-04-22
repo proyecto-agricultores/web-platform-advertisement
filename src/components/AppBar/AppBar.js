@@ -50,6 +50,10 @@ const links = [
     label: "Crear anuncio",
     href: "/createAd",
   },
+  {
+    label: "Cerrar Sesión",
+    href: "/logout",
+  },
 ];
 
 const AppBar = () => {
