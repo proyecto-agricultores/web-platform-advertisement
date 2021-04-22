@@ -163,8 +163,8 @@ function CreateAd(props) {
 
   const selectAllSupplies = (setValues, values) => {
     const allValues = [];
-    for (let i = 1; i <= supplyOptions.length; ++i) {
-      allValues.push(i.toString());
+    for (let i = 0; i < supplyOptions.length; ++i) {
+      allValues.push(supplyOptions[i].value);
     }
     setValues({ ...values, supplyOption: allValues });
   };

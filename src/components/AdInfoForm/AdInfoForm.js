@@ -95,8 +95,8 @@ function AdInfoForm(props) {
           severity: "success",
         });
         setTimeout(() => {
-          history.replace("/login");
-        }, 2000);
+          history.replace("/");
+        }, 1200);
       })
       .catch((error) => {
         if (error.response?.status !== 401) {
